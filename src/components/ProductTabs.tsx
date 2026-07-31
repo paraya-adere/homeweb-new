@@ -49,7 +49,7 @@ export function ProductTabs({
       onPointerDown={() => setPaused(true)}
     >
       <div
-        className="relative grid min-w-[580px] flex-1 grid-cols-3 overflow-hidden rounded-lg border border-white/10 bg-white/[0.015]"
+        className="relative grid w-full min-w-0 flex-1 grid-cols-3 overflow-hidden rounded-lg border border-white/10 bg-white/[0.015]"
         role="tablist"
         aria-label="Producto"
       >
@@ -65,7 +65,7 @@ export function ProductTabs({
               aria-selected={isActive}
               tabIndex={isActive ? 0 : -1}
               onClick={() => onChange(tab.id)}
-              className={`relative min-h-12 border-r border-white/10 px-4 py-3 text-left text-sm font-normal tracking-wide transition-colors last:border-r-0 sm:min-h-14 sm:px-5 sm:text-base ${
+              className={`relative flex min-h-16 min-w-0 items-center justify-center border-r border-white/10 px-2 py-3 text-center text-[11px] leading-tight font-normal tracking-wide transition-colors last:border-r-0 sm:min-h-14 sm:px-4 sm:text-sm md:justify-start md:px-5 md:text-left md:text-base ${
                 isActive
                   ? 'bg-white/[0.045] text-white'
                   : 'text-white/45 hover:bg-white/[0.025] hover:text-white/70'
