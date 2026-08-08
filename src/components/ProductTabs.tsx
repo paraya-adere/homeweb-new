@@ -8,7 +8,7 @@ export const PRODUCT_TABS: { id: ProductTab; label: string }[] = [
   { id: 'engage', label: 'Marketing por WhatsApp' },
 ]
 
-const CYCLE_MS = 8500
+const CYCLE_MS = 16000
 
 export function ProductTabs({
   active,

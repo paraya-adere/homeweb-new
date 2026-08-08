@@ -36,7 +36,7 @@ export function Hero() {
         }}
       />
 
-      <div className="relative z-10 mx-auto w-full max-w-[1280px] px-[clamp(20px,4vw,48px)] pt-[clamp(56px,10vw,112px)] pb-[clamp(112px,10vw,160px)]">
+      <div className="container relative z-10 pt-[clamp(56px,10vw,112px)] pb-[clamp(64px,6vw,96px)]">
         <HeroCopy />
 
         <div className="hero-entry__tabs mt-9 md:mt-10">

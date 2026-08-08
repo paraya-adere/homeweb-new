@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent, type MouseEvent as ReactMouseEvent } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Hero } from './components/Hero'
 import {
   AgentFeatureMockup,
@@ -15,11 +15,16 @@ import { DedicatedSupportMockup, StrategyMockup } from './components/SupportMock
 import { FAQ } from './components/FAQ'
 import { FinalCTA } from './components/FinalCTA'
 
-const CLIENT_CASES = [
+const CLIENTS = [
   {
     name: 'Cencosud',
     logo: 'clientes/cencosud.svg',
     href: 'https://adereso.ai/casos-de-exitos/cencosud',
+  },
+  {
+    name: 'Chilexpress',
+    logo: 'clientes/Chilexpress-1.svg',
+    native: true,
   },
   {
     name: 'Walmart Chile',
@@ -27,9 +32,19 @@ const CLIENT_CASES = [
     href: 'https://adereso.ai/casos-de-exitos/walmart',
   },
   {
+    name: 'Abastible',
+    logo: 'clientes/Abastible-1.svg',
+    native: true,
+  },
+  {
     name: 'Falabella.com',
     logo: 'clientes/Falabella.svg',
     href: 'https://adereso.ai/casos-de-exitos/falabella',
+  },
+  {
+    name: 'BCI',
+    logo: 'clientes/BCI.svg',
+    native: true,
   },
   {
     name: 'Sodimac',
@@ -37,16 +52,92 @@ const CLIENT_CASES = [
     href: 'https://adereso.ai/casos-de-exitos/sodimac',
   },
   {
+    name: 'Kitchen Center',
+    logo: 'clientes/KitchenCenter.svg',
+    native: true,
+  },
+  {
     name: 'Chilquinta',
     logo: 'clientes/chilquinta.svg',
     href: 'https://adereso.ai/casos-de-exitos/chilquinta',
   },
   {
+    name: 'Kaufmann',
+    logo: 'clientes/Kaufmann-1.svg',
+    native: true,
+  },
+  {
     name: 'Grupo K',
     logo: 'clientes/mk-blanco.svg',
     href: 'https://adereso.ai/casos-de-exitos/grupo-k',
+    native: true,
+  },
+  {
+    name: 'MetLife',
+    logo: 'clientes/metlife-1.svg',
+    native: true,
+  },
+  {
+    name: 'IKEA',
+    logo: 'clientes/Ikea.svg',
+    native: true,
+  },
+  {
+    name: 'Bayer',
+    logo: 'clientes/Bayer-1.svg',
+    native: true,
+    size: 'lg',
+  },
+  {
+    name: 'Essbio',
+    logo: 'clientes/essbio-1.svg',
+    native: true,
   },
 ] as const
+
+const CLIENT_ROWS = [CLIENTS.slice(0, 8), CLIENTS.slice(8)] as const
+
+function ClientLogoCard({
+  client,
+  duplicate = false,
+}: {
+  client: (typeof CLIENTS)[number]
+  duplicate?: boolean
+}) {
+  const hasCase = 'href' in client
+  const image = (
+    <img
+      src={client.logo}
+      alt={duplicate ? '' : client.name}
+      className={`logo-card__image${'native' in client && client.native ? ' logo-card__image--native' : ''}${'size' in client && client.size === 'lg' ? ' logo-card__image--lg' : ''}`}
+      loading="lazy"
+      decoding="async"
+    />
+  )
+
+  if (hasCase) {
+    return (
+      <a
+        href={client.href}
+        className="logo-card logo-card--case"
+        target="_blank"
+        rel="noreferrer"
+        aria-label={duplicate ? undefined : `Ver caso de éxito de ${client.name}`}
+        aria-hidden={duplicate || undefined}
+        tabIndex={duplicate ? -1 : undefined}
+      >
+        <div className="logo-card__brand">{image}</div>
+        <span className="logo-card__badge">Caso de éxito</span>
+      </a>
+    )
+  }
+
+  return (
+    <div className="logo-card" aria-hidden={duplicate || undefined}>
+      <div className="logo-card__brand">{image}</div>
+    </div>
+  )
+}
 
 const TESTIMONIALS = [
   {
@@ -124,6 +215,7 @@ const INDUSTRIES = [
     tags: ['Cotización', 'Test drive', 'WhatsApp'],
     image: 'industria-automotriz.jpg',
     alt: 'Interior de vehículo premium en un showroom',
+    href: '/Automotriz',
   },
   {
     id: 'retail',
@@ -133,6 +225,7 @@ const INDUSTRIES = [
     tags: ['Catálogo', 'Carrito', 'Recuperación'],
     image: 'industria-retail.jpg',
     alt: 'Compra online en ecommerce desde el celular',
+    href: '/Retail-ecommerce',
   },
   {
     id: 'salud',
@@ -142,6 +235,7 @@ const INDUSTRIES = [
     tags: ['Citas', 'Recordatorios', 'Resultados'],
     image: 'industria-salud.jpg',
     alt: 'Clínica moderna con agenda digital en tablet',
+    href: '/Salud',
   },
   {
     id: 'finanzas',
@@ -151,6 +245,7 @@ const INDUSTRIES = [
     tags: ['Onboarding', 'Soporte', 'KYC'],
     image: 'industria-finanzas.jpg',
     alt: 'Asesoría financiera en escritorio premium',
+    href: '/Servicios-financieros',
   },
   {
     id: 'turismo',
@@ -160,6 +255,7 @@ const INDUSTRIES = [
     tags: ['Reservas', 'Itinerarios', 'Check-in'],
     image: 'industria-turismo.jpg',
     alt: 'Vista al mar desde un balcón de hotel con maleta',
+    href: '/Turismo',
   },
 ] as const
 
@@ -168,14 +264,8 @@ type InquiryTab = 'venta' | 'postventa'
 export default function App() {
   const [inquiryTab, setInquiryTab] = useState<InquiryTab>('venta')
   const [activeIndustry, setActiveIndustry] = useState<string>(INDUSTRIES[0].id)
+  const [activeTestimonial, setActiveTestimonial] = useState(0)
   const industriesTrackRef = useRef<HTMLDivElement>(null)
-  const testimonialsTrackRef = useRef<HTMLDivElement>(null)
-  const testimonialsDragRef = useRef<{
-    active: boolean
-    startX: number
-    scrollLeft: number
-    moved: boolean
-  }>({ active: false, startX: 0, scrollLeft: 0, moved: false })
   const lockSyncRef = useRef(false)
   const unlockTimerRef = useRef(0)
 
@@ -183,44 +273,9 @@ export default function App() {
     return () => window.clearTimeout(unlockTimerRef.current)
   }, [])
 
-  const onTestimonialsPointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
-    const track = testimonialsTrackRef.current
-    if (!track || event.button !== 0) return
-    testimonialsDragRef.current = {
-      active: true,
-      startX: event.clientX,
-      scrollLeft: track.scrollLeft,
-      moved: false,
-    }
-    track.setPointerCapture(event.pointerId)
-    track.classList.add('is-dragging')
-  }
-
-  const onTestimonialsPointerMove = (event: ReactPointerEvent<HTMLDivElement>) => {
-    const track = testimonialsTrackRef.current
-    const drag = testimonialsDragRef.current
-    if (!track || !drag.active) return
-    const delta = event.clientX - drag.startX
-    if (Math.abs(delta) > 4) drag.moved = true
-    track.scrollLeft = drag.scrollLeft - delta
-  }
-
-  const onTestimonialsPointerUp = (event: ReactPointerEvent<HTMLDivElement>) => {
-    const track = testimonialsTrackRef.current
-    const drag = testimonialsDragRef.current
-    if (!track) return
-    drag.active = false
-    track.classList.remove('is-dragging')
-    if (track.hasPointerCapture(event.pointerId)) {
-      track.releasePointerCapture(event.pointerId)
-    }
-  }
-
-  const onTestimonialClick = (event: ReactMouseEvent<HTMLAnchorElement>) => {
-    if (testimonialsDragRef.current.moved) {
-      event.preventDefault()
-      testimonialsDragRef.current.moved = false
-    }
+  const goToTestimonial = (index: number) => {
+    const len = TESTIMONIALS.length
+    setActiveTestimonial(((index % len) + len) % len)
   }
 
   const scrollToIndustry = (id: string) => {
@@ -271,30 +326,22 @@ export default function App() {
     <main className="overflow-x-hidden bg-[var(--bg-page)] text-white">
       <Hero />
 
-      <div className="container pt-[clamp(80px,8vw,128px)]">
-        <div className="logo-bar" aria-label="Marcas que confían en nosotros">
-          {CLIENT_CASES.map((client) => (
-            <a
-              key={client.name}
-              href={client.href}
-              className="logo-card"
-              target="_blank"
-              rel="noreferrer"
-              aria-label={`Ver caso de éxito de ${client.name}`}
+      <div className="container pt-[clamp(40px,4vw,64px)]">
+        <div className="logo-bar-wrap" aria-label="Marcas que confían en nosotros">
+          {CLIENT_ROWS.map((row, rowIndex) => (
+            <div
+              key={rowIndex}
+              className={`logo-marquee logo-marquee--${rowIndex === 0 ? 'left' : 'right'}`}
             >
-              <div className="logo-card__brand">
-                <img
-                  src={client.logo}
-                  alt={client.name}
-                  className={`logo-card__image${client.name === 'Grupo K' ? ' logo-card__image--native' : ''}`}
-                  loading="lazy"
-                />
+              <div className="logo-marquee__track">
+                {row.map((client) => (
+                  <ClientLogoCard key={client.name} client={client} />
+                ))}
+                {row.map((client) => (
+                  <ClientLogoCard key={`${client.name}-dup`} client={client} duplicate />
+                ))}
               </div>
-              <span className="logo-card__badge">
-                Ver caso
-                <span aria-hidden="true">↗</span>
-              </span>
-            </a>
+            </div>
           ))}
         </div>
       </div>
@@ -303,28 +350,23 @@ export default function App() {
         <div className="container">
           <div className="stats-card">
             <div className="stats-card__header">
-              <h2 className="stats-card__title">Resultados que mueven la operación.</h2>
+              <h2 className="stats-card__title">Resultados que mueven tu operación.</h2>
             </div>
             <div className="stats__grid">
               <div className="stat">
-                <span className="stat__eyebrow">Escala</span>
-                <div className="stat__value">+20M</div>
-                <p className="stat__label">conversaciones/mes</p>
+                <span className="stat__eyebrow">Conversión</span>
+                <div className="stat__value">+23%</div>
+                <p className="stat__label">en conversión del canal conversacional</p>
               </div>
               <div className="stat">
                 <span className="stat__eyebrow">Automatización</span>
                 <div className="stat__value">98%</div>
-                <p className="stat__label">sin intervención</p>
+                <p className="stat__label">de conversaciones resueltas sin intervención humana</p>
               </div>
               <div className="stat">
-                <span className="stat__eyebrow">Conversión</span>
-                <div className="stat__value">35%</div>
-                <p className="stat__label">carritos recuperados</p>
-              </div>
-              <div className="stat">
-                <span className="stat__eyebrow">Impacto</span>
-                <div className="stat__value">+1M</div>
-                <p className="stat__label">USD generados/año</p>
+                <span className="stat__eyebrow">Velocidad</span>
+                <div className="stat__value">&lt; 30 seg</div>
+                <p className="stat__label">tiempo de primera respuesta</p>
               </div>
             </div>
           </div>
@@ -343,7 +385,7 @@ export default function App() {
                 tiempo real y operan dentro de Desk.
               </p>
               <a href="https://adereso.ai/adereso-studio" className="feature__link">
-                Studio →
+                Conocer Studio →
               </a>
             </div>
             <div
@@ -369,7 +411,7 @@ export default function App() {
                 primero; si escala, el humano retoma el mismo ticket con todo el historial.
               </p>
               <a href="https://adereso.ai/adereso-desk" className="feature__link">
-                Desk →
+                Conocer Desk →
               </a>
             </div>
             <div
@@ -394,7 +436,7 @@ export default function App() {
                 escala, Desk recibe el ticket con historial completo.
               </p>
               <a href="https://adereso.ai/adereso-engage" className="feature__link">
-                Engage →
+                Conocer Engage →
               </a>
             </div>
             <div
@@ -504,6 +546,14 @@ export default function App() {
                     loading="lazy"
                   />
                   <div className="industry-card__shade" aria-hidden="true" />
+                  <a
+                    className="industry-card__cta"
+                    href={industry.href}
+                    aria-label={`Ver solución para ${industry.title}`}
+                  >
+                    Ver solución
+                    <span aria-hidden="true">→</span>
+                  </a>
                   <div className="industry-card__body">
                     <span className="industry-card__index">
                       {String(index + 1).padStart(2, '0')}
@@ -532,54 +582,103 @@ export default function App() {
           </div>
 
           <div
-            ref={testimonialsTrackRef}
-            className="testimonials__track"
+            className="testimonials__carousel"
             role="region"
+            aria-roledescription="carrusel"
             aria-label="Casos de éxito"
-            tabIndex={0}
-            onPointerDown={onTestimonialsPointerDown}
-            onPointerMove={onTestimonialsPointerMove}
-            onPointerUp={onTestimonialsPointerUp}
-            onPointerCancel={onTestimonialsPointerUp}
           >
-            {TESTIMONIALS.map((item) => (
-              <a
-                key={item.company}
-                className="testimonial-card"
-                href={item.href}
-                target="_blank"
-                rel="noreferrer"
-                onClick={onTestimonialClick}
-                draggable={false}
-              >
-                <div className="testimonial-card__top">
-                  <img
-                    src={item.logo}
-                    alt={item.company}
-                    className={`testimonial-card__logo${
-                      item.company === 'Cencosud' ? ' testimonial-card__logo--cencosud' : ''
-                    }`}
-                  />
-                  <span className="testimonial-card__metric">{item.metric}</span>
-                </div>
-                <p className="testimonial-card__quote">“{item.body}”</p>
-                <div className="testimonial-card__author">
-                  <img
-                    src={item.avatar}
-                    alt={item.author}
-                    className="testimonial-card__avatar"
-                    loading="lazy"
+            <div className="testimonials__stage">
+              {TESTIMONIALS.map((item, index) => {
+                const len = TESTIMONIALS.length
+                let offset = index - activeTestimonial
+                if (offset > len / 2) offset -= len
+                if (offset < -len / 2) offset += len
+                const isActive = offset === 0
+                const isVisible = Math.abs(offset) <= 1
+
+                return (
+                  <a
+                    key={item.company}
+                    className={`testimonial-card${isActive ? ' is-active' : ''}`}
+                    href={item.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-hidden={!isActive}
+                    tabIndex={isActive ? 0 : -1}
                     draggable={false}
+                    style={{
+                      transform: `translate(calc(-50% + ${offset * 58}%), -50%) scale(${
+                        isActive ? 1 : 0.85
+                      })`,
+                      opacity: isVisible ? (isActive ? 1 : 0.28) : 0,
+                      zIndex: isActive ? 3 : isVisible ? 2 : 1,
+                      pointerEvents: isActive ? 'auto' : 'none',
+                    }}
+                  >
+                    <div className="testimonial-card__top">
+                      <img
+                        src={item.logo}
+                        alt={item.company}
+                        className={`testimonial-card__logo${
+                          item.company === 'Cencosud' ? ' testimonial-card__logo--cencosud' : ''
+                        }`}
+                      />
+                      <span className="testimonial-card__metric">{item.metric}</span>
+                    </div>
+                    <p className="testimonial-card__quote">“{item.body}”</p>
+                    <div className="testimonial-card__author">
+                      <img
+                        src={item.avatar}
+                        alt={item.author}
+                        className="testimonial-card__avatar"
+                        loading="lazy"
+                        draggable={false}
+                      />
+                      <div>
+                        <p className="testimonial-card__name">{item.author}</p>
+                        <p className="testimonial-card__role">
+                          {item.role} · {item.company}
+                        </p>
+                      </div>
+                    </div>
+                  </a>
+                )
+              })}
+            </div>
+
+            <div className="testimonials__controls">
+              <button
+                type="button"
+                className="testimonials__arrow"
+                onClick={() => goToTestimonial(activeTestimonial - 1)}
+                aria-label="Testimonio anterior"
+              >
+                <span aria-hidden="true">←</span>
+              </button>
+
+              <div className="testimonials__dots" role="tablist" aria-label="Seleccionar testimonio">
+                {TESTIMONIALS.map((item, index) => (
+                  <button
+                    key={item.company}
+                    type="button"
+                    className={`testimonials__dot${index === activeTestimonial ? ' is-active' : ''}`}
+                    onClick={() => goToTestimonial(index)}
+                    aria-label={`Ir al testimonio de ${item.company}`}
+                    aria-selected={index === activeTestimonial}
+                    role="tab"
                   />
-                  <div>
-                    <p className="testimonial-card__name">{item.author}</p>
-                    <p className="testimonial-card__role">
-                      {item.role} · {item.company}
-                    </p>
-                  </div>
-                </div>
-              </a>
-            ))}
+                ))}
+              </div>
+
+              <button
+                type="button"
+                className="testimonials__arrow"
+                onClick={() => goToTestimonial(activeTestimonial + 1)}
+                aria-label="Testimonio siguiente"
+              >
+                <span aria-hidden="true">→</span>
+              </button>
+            </div>
           </div>
         </div>
       </section>

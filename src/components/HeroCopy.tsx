@@ -37,6 +37,30 @@ export function HeroCopy() {
           Pruébalo
         </a>
       </div>
+
+      <div
+        className="hero-entry__partners mt-5 flex flex-wrap items-center gap-4 sm:gap-5"
+        aria-label="Partners oficiales"
+      >
+        <img
+          src={`${import.meta.env.BASE_URL}partners/meta-business-partner.webp`}
+          alt="Meta Business Partner"
+          width={140}
+          height={56}
+          className="h-6 w-auto object-contain sm:h-7"
+          loading="eager"
+          decoding="async"
+        />
+        <img
+          src={`${import.meta.env.BASE_URL}partners/shopify-partners.webp`}
+          alt="Shopify Partners"
+          width={140}
+          height={56}
+          className="h-6 w-auto object-contain sm:h-7"
+          loading="eager"
+          decoding="async"
+        />
+      </div>
     </div>
   )
 }

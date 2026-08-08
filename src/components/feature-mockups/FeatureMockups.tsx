@@ -1,256 +1,244 @@
-import type { ReactNode } from 'react'
 import * as Tabs from '@radix-ui/react-tabs'
-import * as Tooltip from '@radix-ui/react-tooltip'
 import {
+  IconActivity,
   IconBell,
+  IconBolt,
+  IconBox,
   IconBrain,
   IconBrandFacebook,
   IconBrandInstagram,
   IconBrandTiktok,
   IconBrandWhatsapp,
   IconBrandX,
+  IconBuildingStore,
+  IconChartBar,
+  IconChartDots,
+  IconChartLine,
   IconCheck,
   IconChevronDown,
   IconClock,
-  IconDatabase,
   IconDotsVertical,
+  IconFileText,
+  IconHistory,
   IconInbox,
+  IconLayoutSidebarLeftCollapse,
   IconMail,
+  IconMessageQuestion,
+  IconMessages,
   IconPackage,
   IconPlus,
   IconPuzzle,
+  IconRobotFace,
   IconSearch,
   IconSend,
   IconSettings,
+  IconSitemap,
   IconSparkles,
+  IconTestPipe,
   IconUsers,
 } from '@tabler/icons-react'
 
-function Frame({
-  icon,
-  title,
-  status,
-  children,
-  cornerClass = 'rounded-2xl',
-}: {
-  icon: ReactNode
-  title: string
-  status: string
-  children: ReactNode
-  cornerClass?: string
-}) {
-  return (
-    <Tooltip.Provider delayDuration={200}>
-      <div
-        className={`flex h-full min-h-[420px] flex-col overflow-hidden border border-white/[0.08] bg-[#0C0C0D] shadow-[0_22px_55px_rgba(0,0,0,0.28)] ${cornerClass}`}
-      >
-        <header className="flex h-12 shrink-0 items-center gap-2.5 border-b border-white/[0.07] bg-[#131415] px-3.5">
-          <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-white/[0.055] text-white/55">
-            {icon}
-          </span>
-          <p className="text-[13px] font-semibold text-white/85">{title}</p>
-          <Tooltip.Root>
-            <Tooltip.Trigger asChild>
-              <span className="ml-auto inline-flex cursor-default items-center gap-1.5 rounded-full border border-white/[0.07] bg-white/[0.035] px-2 py-1 text-[9px] font-medium text-white/45">
-                <span className="h-1.5 w-1.5 rounded-full bg-[#52CE5E]" />
-                {status}
-              </span>
-            </Tooltip.Trigger>
-            <Tooltip.Portal>
-              <Tooltip.Content
-                sideOffset={6}
-                className="z-50 rounded-md border border-white/10 bg-[#1a1a1a] px-2.5 py-1.5 text-[10px] text-white shadow-xl"
-              >
-                Sincronizado en tiempo real
-                <Tooltip.Arrow className="fill-[#1a1a1a]" />
-              </Tooltip.Content>
-            </Tooltip.Portal>
-          </Tooltip.Root>
-        </header>
-        <div className="min-h-0 flex-1">{children}</div>
-      </div>
-    </Tooltip.Provider>
-  )
-}
+const AGENT_NAV = [
+  {
+    label: 'Construir',
+    items: [
+      { name: 'Mis Agentes', icon: IconRobotFace, active: true },
+      { name: 'Activadores', icon: IconBolt },
+      { name: 'Mapa', icon: IconSitemap },
+      { name: 'Recursos Compartidos', icon: IconBox },
+      { name: 'Tiendas', icon: IconBuildingStore },
+    ],
+  },
+  {
+    label: 'Contenido',
+    items: [{ name: 'Conocimiento', icon: IconBrain }],
+  },
+  {
+    label: 'Analítica',
+    items: [
+      { name: 'Analítica', icon: IconChartLine },
+      { name: 'Diagrama', icon: IconChartDots },
+      { name: 'Conversaciones', icon: IconMessages },
+    ],
+  },
+  {
+    label: 'Calidad',
+    items: [
+      { name: 'Tests', icon: IconTestPipe },
+      { name: 'Diagnóstico', icon: IconActivity },
+      { name: 'Versiones', icon: IconHistory },
+    ],
+  },
+  {
+    label: 'Extras',
+    items: [
+      { name: 'Uso', icon: IconChartBar },
+      { name: 'Demos', icon: IconMessageQuestion },
+      { name: 'Auditoría', icon: IconFileText },
+    ],
+  },
+] as const
 
 export function AgentFeatureMockup() {
   return (
-    <Frame
-      icon={<IconBrain size={14} stroke={1.7} />}
-      title="Mi agente · Aura Ventas"
-      status="Publicado"
-      cornerClass="rounded-tl-2xl rounded-br-2xl"
-    >
-      <div className="relative h-full min-h-0 overflow-hidden bg-[#0C0C0D]">
-        <div className="absolute inset-0 pl-[30%] opacity-45">
-          <div className="flex h-full flex-col p-3">
-            <div className="mb-2 flex items-center justify-between">
-              <div>
-                <p className="text-[10px] font-semibold text-white/60">Vista general</p>
-                <p className="text-[8px] text-white/22">Últimos 30 días</p>
-              </div>
-              <span className="rounded-md border border-white/[0.07] px-2 py-1 text-[8px] text-white/25">
-                Actualizado ahora
-              </span>
+    <div className="flex h-full min-h-[420px] overflow-hidden rounded-tl-2xl rounded-br-2xl border-t border-l border-white/[0.09] bg-[#0d0d0d] text-[13px] shadow-[0_22px_55px_rgba(0,0,0,0.38)]">
+      <aside className="hidden w-[176px] shrink-0 flex-col overflow-hidden border-r border-white/[0.06] bg-[#0d0d0d] lg:flex">
+        <div className="flex shrink-0 items-center gap-2 px-3.5 py-3.5">
+          <img src="adereso-isotipo.png" alt="" className="h-6 w-6 rounded-full object-cover" />
+          <span className="text-[13px] font-semibold tracking-tight text-white">
+            Adereso Studio
+          </span>
+        </div>
+
+        <nav className="min-h-0 flex-1 overflow-hidden px-2.5">
+          {AGENT_NAV.map((section) => (
+            <div key={section.label} className="mb-3.5">
+              <p className="mb-1 px-2 text-[10px] font-medium tracking-[0.08em] text-white/30 uppercase">
+                {section.label}
+              </p>
+              <ul className="space-y-0.5">
+                {section.items.map((item) => {
+                  const ItemIcon = item.icon
+                  const active = 'active' in item && item.active
+                  return (
+                    <li key={item.name}>
+                      <span
+                        className={`flex items-center gap-2 truncate rounded-md px-2.5 py-[7px] text-[12px] ${
+                          active ? 'bg-white/[0.08] font-medium text-white' : 'text-white/45'
+                        }`}
+                      >
+                        <ItemIcon
+                          size={15}
+                          stroke={1.5}
+                          className={`shrink-0 ${active ? 'text-white/80' : 'text-white/40'}`}
+                        />
+                        <span className="truncate">{item.name}</span>
+                      </span>
+                    </li>
+                  )
+                })}
+              </ul>
             </div>
-            <div className="grid grid-cols-3 gap-2">
+          ))}
+        </nav>
+
+        <div className="shrink-0 border-t border-white/[0.06] px-3.5 py-3">
+          <span className="inline-flex items-center gap-2 text-[12px] text-white/40">
+            <IconLayoutSidebarLeftCollapse size={15} stroke={1.5} />
+            Contraer
+          </span>
+        </div>
+      </aside>
+
+      <div className="flex min-w-0 flex-1 flex-col bg-[#0f0f0f]">
+        <header className="flex h-14 shrink-0 items-center gap-3 border-b border-white/[0.06] px-4 sm:px-5">
+          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/[0.05] text-white/60">
+            <IconBrain size={16} stroke={1.6} />
+          </span>
+          <div className="min-w-0">
+            <p className="truncate text-[14px] font-semibold text-white">Mi agente · Vera</p>
+            <p className="text-[11px] text-white/35">Configuración general</p>
+          </div>
+          <span className="ml-auto inline-flex items-center rounded-full border border-white/[0.08] bg-white/[0.035] px-2.5 py-1 text-[10px] font-medium text-white/50">
+            Publicado
+          </span>
+        </header>
+
+        <div className="scrollbar-hide min-h-0 flex-1 overflow-y-auto px-4 py-4 sm:px-5">
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <p className="text-[10px] font-medium tracking-[0.06em] text-white/30 uppercase">
+                Nombre
+              </p>
+              <p className="mt-1 text-[14px] font-semibold text-white/80">Vera</p>
+            </div>
+            <div>
+              <p className="text-[10px] font-medium tracking-[0.06em] text-white/30 uppercase">
+                Zona horaria
+              </p>
+              <p className="mt-1 text-[14px] font-medium text-white/70">Santiago</p>
+            </div>
+          </div>
+
+          <div className="mt-4 rounded-xl border border-white/[0.07] bg-[#141414] p-3.5">
+            <div className="flex items-center gap-2">
+              <IconSparkles size={14} stroke={1.6} className="text-white/55" />
+              <p className="text-[12px] font-semibold text-white/70">Objetivo principal</p>
+            </div>
+            <p className="mt-2 text-[12px] leading-[1.5] text-white/50">
+              Entender cada consulta, recomendar el producto correcto y acompañar al cliente hasta
+              completar su compra.
+            </p>
+          </div>
+
+          <div className="mt-4 flex items-center justify-between gap-3">
+            <p className="text-[10px] font-medium tracking-[0.08em] text-white/30 uppercase">
+              Personalidad
+            </p>
+            <p className="truncate text-[12px] text-white/60">Clara · cercana · resolutiva</p>
+          </div>
+
+          <div className="mt-4 border-t border-white/[0.06] pt-4">
+            <p className="mb-2.5 text-[10px] font-medium tracking-[0.08em] text-white/30 uppercase">
+              Conocimiento conectado
+            </p>
+            <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
               {[
-                ['Interacciones', '1.284'],
-                ['Conversión', '35%'],
-                ['Derivación', '8%'],
-              ].map(([label, value]) => (
+                ['Shopify', 'Stock y pedidos'],
+                ['Catálogo', '1.248 productos'],
+              ].map(([name, detail]) => (
                 <div
-                  key={label}
-                  className="h-[68px] rounded-lg border border-white/[0.07] bg-[#131415] p-2.5"
+                  key={name}
+                  className="flex items-center gap-2.5 rounded-xl border border-white/[0.07] bg-[#141414] p-2.5"
                 >
-                  <p className="text-[7px] tracking-[0.06em] text-white/25 uppercase">{label}</p>
-                  <p className="mt-1 text-[16px] font-semibold text-white/70">{value}</p>
+                  {name === 'Shopify' ? (
+                    <img src="shopify.svg" alt="" className="h-4 w-4 shrink-0" />
+                  ) : (
+                    <IconPackage size={15} stroke={1.5} className="shrink-0 text-white/40" />
+                  )}
+                  <div className="min-w-0">
+                    <p className="text-[12px] font-medium text-white/70">{name}</p>
+                    <p className="truncate text-[10px] text-white/30">{detail}</p>
+                  </div>
+                  <span className="ml-auto flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-[#22c55e]">
+                    <IconCheck size={10} stroke={2.5} className="text-white" />
+                  </span>
                 </div>
               ))}
             </div>
-            <div className="mt-2 flex h-[100px] items-end gap-1.5 rounded-lg border border-white/[0.07] bg-[#131415] p-3">
-              {[38, 54, 46, 70, 60, 82, 74, 92].map((height, index) => (
+          </div>
+
+          <div className="mt-4 border-t border-white/[0.06] pt-4">
+            <p className="mb-2.5 text-[10px] font-medium tracking-[0.08em] text-white/30 uppercase">
+              Acciones activas
+            </p>
+            <div className="flex flex-wrap gap-1.5">
+              {['Recomendar', 'Cotizar', 'Escalar'].map((action) => (
                 <span
-                  key={index}
-                  className="flex-1 rounded-t-sm bg-white/[0.08]"
-                  style={{ height: `${height * 0.62}px` }}
-                />
+                  key={action}
+                  className="rounded-full border border-white/[0.08] bg-white/[0.03] px-2.5 py-1 text-[10px] text-white/50"
+                >
+                  {action}
+                </span>
               ))}
             </div>
-            <div className="mt-2 grid flex-1 grid-cols-2 gap-2">
-              {['Personalidad', 'Flujos activos', 'Base de conocimiento', 'Versiones'].map(
-                (title) => (
-                  <div
-                    key={title}
-                    className="rounded-lg border border-white/[0.07] bg-[#131415] p-3"
-                  >
-                    <p className="text-[9px] font-medium text-white/45">{title}</p>
-                    <div className="mt-3 h-1.5 w-3/4 rounded-full bg-white/[0.06]" />
-                    <div className="mt-2 h-1.5 w-1/2 rounded-full bg-white/[0.045]" />
-                  </div>
-                ),
-              )}
-            </div>
           </div>
         </div>
 
-        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(12,12,13,0)_38%,rgba(12,12,13,0.18)_66%,rgba(12,12,13,0.82)_100%)]" />
-
-        <div className="absolute top-3 bottom-3 left-3 z-10 flex w-[84%] max-w-[390px] flex-col overflow-hidden rounded-xl border border-white/[0.1] bg-[#111213] shadow-[0_22px_55px_rgba(0,0,0,0.55)] sm:w-[68%]">
-          <div className="flex h-14 shrink-0 items-center gap-3 border-b border-white/[0.07] px-4">
-            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/[0.045] text-white/45">
-              <IconBrain size={16} stroke={1.6} />
-            </span>
-            <div>
-              <p className="text-[14px] font-semibold text-white/80">Configuración del agente</p>
-              <p className="text-[10px] text-white/30">Información general sobre tu negocio</p>
-            </div>
-            <span className="ml-auto h-1.5 w-1.5 rounded-full bg-[#52CE5E]" />
-          </div>
-
-          <div className="min-h-0 flex-1 overflow-hidden p-4">
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <p className="text-[10px] font-medium text-white/30">Nombre</p>
-                <p className="mt-1 text-[13px] font-semibold text-white/75">Aura Ventas</p>
-              </div>
-              <div>
-                <p className="text-[10px] font-medium text-white/30">Zona horaria</p>
-                <p className="mt-1 text-[13px] font-medium text-white/65">Santiago</p>
-              </div>
-            </div>
-
-            <div className="mt-3 rounded-lg border border-white/[0.07] bg-white/[0.025] p-3">
-              <div className="flex items-center gap-2">
-                <IconSparkles size={14} stroke={1.6} className="text-white/55" />
-                <p className="text-[11px] font-semibold text-white/65">Objetivo principal</p>
-              </div>
-              <p className="mt-2 text-[12px] leading-[1.5] text-white/52">
-                Entender cada consulta, recomendar el producto correcto y acompañar al cliente
-                hasta completar su compra.
-              </p>
-            </div>
-
-            <div className="mt-3 flex items-center justify-between gap-3">
-              <p className="text-[10px] font-medium tracking-[0.08em] text-white/28 uppercase">
-                Personalidad
-              </p>
-              <p className="truncate text-[11px] text-white/55">Clara · cercana · resolutiva</p>
-            </div>
-
-            <div className="mt-3 border-t border-white/[0.07] pt-3">
-              <p className="mb-2.5 text-[10px] font-medium tracking-[0.08em] text-white/28 uppercase">
-                Conocimiento conectado
-              </p>
-              <div className="grid grid-cols-2 gap-2">
-                {[
-                  [IconPackage, 'Shopify', 'Stock y pedidos'],
-                  [IconPackage, 'Catálogo', '1.248 productos'],
-                ].map(([Icon, name, detail]) => {
-                  const SourceIcon = Icon as typeof IconDatabase
-                  return (
-                    <div
-                      key={name as string}
-                      className="flex items-center gap-2 rounded-lg border border-white/[0.07] bg-white/[0.025] p-2"
-                    >
-                      {name === 'Shopify' ? (
-                        <img src="shopify.svg" alt="" className="h-[13px] w-[13px] shrink-0" />
-                      ) : (
-                        <SourceIcon
-                          size={13}
-                          stroke={1.5}
-                          className="shrink-0 text-white/35"
-                        />
-                      )}
-                      <div className="min-w-0">
-                        <p className="text-[11px] font-medium text-white/65">{name as string}</p>
-                        <p className="truncate text-[9px] text-white/25">{detail as string}</p>
-                      </div>
-                      <IconCheck
-                        size={10}
-                        stroke={2}
-                        className={`ml-auto shrink-0 ${
-                          name === 'Shopify' ? 'text-[#95BF47]' : 'text-white/55'
-                        }`}
-                      />
-                    </div>
-                  )
-                })}
-              </div>
-            </div>
-
-            <div className="mt-3 border-t border-white/[0.07] pt-3">
-              <p className="mb-2 text-[10px] font-medium tracking-[0.08em] text-white/28 uppercase">
-                Acciones activas
-              </p>
-              <div className="flex flex-wrap gap-1.5">
-                {['Recomendar', 'Cotizar', 'Escalar'].map((action) => (
-                  <span
-                    key={action}
-                    className="rounded-full border border-white/[0.07] bg-white/[0.025] px-2.5 py-1 text-[9px] text-white/45"
-                  >
-                    {action}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          <div className="flex shrink-0 items-center justify-between border-t border-white/[0.07] bg-[#131415] px-4 py-3">
-            <span className="inline-flex items-center gap-1.5 text-[10px] text-white/30">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#52CE5E]" />
-              Operando 24/7
-            </span>
-            <button
-              type="button"
-              className="rounded-full bg-white px-3.5 py-2 text-[10px] font-semibold text-[#18181B]"
-            >
-              Probar agente
-            </button>
-          </div>
+        <div className="flex shrink-0 items-center justify-between gap-3 border-t border-white/[0.06] bg-[#0d0d0d] px-4 py-3 sm:px-5">
+          <span className="inline-flex items-center gap-1.5 text-[11px] text-white/40">
+            <IconClock size={13} stroke={1.6} />
+            Operando 24/7
+          </span>
+          <button
+            type="button"
+            className="rounded-full bg-white px-4 py-2 text-[11px] font-semibold text-[#18181B]"
+          >
+            Probar agente
+          </button>
         </div>
       </div>
-    </Frame>
+    </div>
   )
 }
 
@@ -301,7 +289,7 @@ const HELPDESK_CHANNEL_ICONS = {
 
 export function HelpdeskFeatureMockup() {
   return (
-    <div className="flex h-full min-h-[420px] overflow-hidden rounded-tr-2xl rounded-bl-2xl border border-white/[0.09] bg-[#0C0C0D] shadow-[0_22px_55px_rgba(0,0,0,0.38)]">
+    <div className="flex h-full min-h-[420px] overflow-hidden rounded-tr-2xl rounded-bl-2xl border-t border-r border-white/[0.09] bg-[#0C0C0D] shadow-[0_22px_55px_rgba(0,0,0,0.38)]">
       <aside className="hidden w-11 shrink-0 flex-col items-center border-r border-white/[0.07] bg-[#0E0F10] py-2.5 lg:flex">
         {[IconPlus, IconPuzzle, IconSearch, IconSettings].map((Icon, index) => (
           <span
@@ -460,7 +448,7 @@ export function HelpdeskFeatureMockup() {
 
 export function EngageFeatureMockup() {
   return (
-    <div className="flex h-full min-h-[420px] flex-col overflow-hidden rounded-tl-2xl rounded-br-2xl border border-white/[0.09] bg-[#0C0C0D] shadow-[0_22px_55px_rgba(0,0,0,0.38)]">
+    <div className="flex h-full min-h-[420px] flex-col overflow-hidden rounded-tl-2xl rounded-br-2xl border-t border-l border-white/[0.09] bg-[#0C0C0D] shadow-[0_22px_55px_rgba(0,0,0,0.38)]">
       <header className="flex h-12 shrink-0 items-center gap-2.5 border-b border-white/[0.07] bg-[#111213] px-3.5">
         <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-white/[0.055] text-white/55">
           <IconSend size={14} stroke={1.7} />
@@ -545,9 +533,9 @@ export function EngageFeatureMockup() {
                 <p className="text-[9px] font-semibold text-white/55">Vista del mensaje</p>
               </div>
               <div className="flex min-h-0 flex-1 items-center p-2.5">
-                <div className="ml-auto w-full rounded-xl rounded-tr-[4px] border border-white/[0.08] bg-[#181819] p-2.5">
-                  <p className="text-[10px] font-semibold text-white/75">Hola, María</p>
-                  <p className="mt-1 text-[9px] leading-[1.4] text-white/42">
+                <div className="ml-auto w-full rounded-xl rounded-tr-[4px] border border-[#08503f] bg-[#023d31] p-2.5">
+                  <p className="text-[10px] font-semibold text-white/90">Hola, María</p>
+                  <p className="mt-1 text-[9px] leading-[1.4] text-white/70">
                     Tu cafetera sigue disponible. La guardamos para ti por 24 horas.
                   </p>
                   <div className="mt-2 overflow-hidden rounded-lg border border-white/[0.08] bg-[#111213]">
