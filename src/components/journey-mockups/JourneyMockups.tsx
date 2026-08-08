@@ -1,52 +1,20 @@
-import type { ReactNode } from 'react'
-import * as Tabs from '@radix-ui/react-tabs'
+import { useEffect, useState, type ReactNode } from 'react'
 import * as Tooltip from '@radix-ui/react-tooltip'
 import {
-  IconArrowRight,
   IconBrandWhatsapp,
+  IconCalendarCheck,
+  IconCalendarEvent,
   IconCheck,
-  IconCreditCard,
-  IconMessageCircle,
+  IconHeadset,
+  IconLink,
+  IconMinus,
+  IconPlus,
   IconRefresh,
-  IconRepeat,
-  IconSend,
+  IconShoppingCart,
   IconSparkles,
+  IconTag,
   IconTruck,
 } from '@tabler/icons-react'
-
-const consultationTabClass =
-  'flex-1 rounded-md px-2 py-1.5 text-[10px] font-medium text-white/35 outline-none transition-colors hover:text-white/60 data-[state=active]:bg-white/[0.07] data-[state=active]:text-white/75'
-
-function GlowFrame({
-  background,
-  children,
-  flushBottomRight = false,
-  flushBottomLeft = false,
-  borderless = false,
-}: {
-  background: string
-  children: ReactNode
-  flushBottomRight?: boolean
-  flushBottomLeft?: boolean
-  borderless?: boolean
-}) {
-  const flushClass = flushBottomRight
-    ? 'pt-[clamp(12px,1.5vw,18px)] pl-[clamp(12px,1.5vw,18px)]'
-    : flushBottomLeft
-      ? 'pt-[clamp(12px,1.5vw,18px)] pr-[clamp(12px,1.5vw,18px)]'
-      : 'p-[clamp(12px,1.5vw,18px)]'
-
-  return (
-    <div
-      className={`h-full w-full overflow-hidden rounded-2xl bg-cover bg-center shadow-[0_22px_60px_rgba(0,0,0,0.28)] ${
-        borderless ? '' : 'border border-white/[0.08]'
-      } ${flushClass}`}
-      style={{ backgroundImage: `url("${background}")` }}
-    >
-      <div className="h-full">{children}</div>
-    </div>
-  )
-}
 
 function Card({
   icon,
@@ -54,20 +22,19 @@ function Card({
   status,
   children,
   monochrome = false,
-  cornerClass = 'rounded-xl',
+  hideHeader = false,
 }: {
-  icon: ReactNode
-  title: string
-  status: string
+  icon?: ReactNode
+  title?: string
+  status?: string
   children: ReactNode
   monochrome?: boolean
-  cornerClass?: string
+  hideHeader?: boolean
 }) {
   return (
     <Tooltip.Provider delayDuration={200}>
-      <div
-        className={`flex h-full flex-col overflow-hidden border border-white/[0.08] bg-[#0C0C0D] shadow-[0_18px_45px_rgba(0,0,0,0.28)] ${cornerClass}`}
-      >
+      <div className="flex h-full flex-col overflow-hidden rounded-xl bg-[#0C0C0D]">
+        {!hideHeader && (
         <header className="flex h-12 shrink-0 items-center gap-2.5 border-b border-white/[0.07] bg-[#131415] px-4">
           <span
             className={`flex h-8 w-8 items-center justify-center rounded-lg ${
@@ -101,423 +68,740 @@ function Card({
             </Tooltip.Portal>
           </Tooltip.Root>
         </header>
+        )}
         <div className="min-h-0 flex-1">{children}</div>
       </div>
     </Tooltip.Provider>
   )
 }
 
-function ConsultationMockup() {
+function BentoCell({
+  title,
+  description,
+  wide = false,
+  children,
+}: {
+  title: string
+  description: string
+  wide?: boolean
+  children: ReactNode
+}) {
   return (
-    <GlowFrame background="fondo-glow-1080x1080@2x (2).webp" flushBottomRight borderless>
-      <Card
-        icon={<IconMessageCircle size={16} stroke={1.7} />}
-        title="Inbox · Consulta"
-        status="IA atendiendo"
-        monochrome
-        cornerClass="rounded-tl-xl rounded-br-xl"
-      >
-        <Tabs.Root defaultValue="conversation" className="flex min-h-0 flex-1 flex-col">
-          <Tabs.List className="mx-3 mt-3 flex shrink-0 rounded-lg border border-white/[0.06] bg-black/20 p-1">
-            <Tabs.Trigger value="conversation" className={consultationTabClass}>
-              Conversación
-            </Tabs.Trigger>
-            <Tabs.Trigger value="context" className={consultationTabClass}>
-              Contexto
-            </Tabs.Trigger>
-          </Tabs.List>
-
-          <Tabs.Content
-            value="conversation"
-            className="flex min-h-0 flex-1 flex-col p-3 outline-none"
-          >
-            <div className="mb-2 flex shrink-0 items-center gap-2 border-b border-white/[0.06] pb-2">
-              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white/[0.08] text-[10px] font-semibold text-white/65">
-                CM
-              </span>
-              <div>
-                <p className="text-[12px] font-medium text-white/75">Camila M.</p>
-                <p className="flex items-center gap-1 text-[9px] text-white/30">
-                  <IconBrandWhatsapp size={10} stroke={1.8} className="text-[#52CE5E]/75" />
-                  WhatsApp
-                </p>
-              </div>
-              <span className="ml-auto text-[9px] text-white/25">Ahora</span>
-            </div>
-
-            <div className="min-h-0 flex-1 space-y-2 overflow-hidden">
-              <div className="max-w-[88%] rounded-xl rounded-tl-[4px] border border-white/[0.07] bg-[#171719] px-3 py-1.5">
-                <p className="text-[12px] leading-[1.4] text-white/70">
-                  Hola, ¿tienen la Cafetera Aura?
-                </p>
-              </div>
-
-              <div className="ml-auto max-w-[92%] rounded-xl rounded-tr-[4px] border border-white/[0.08] bg-[#202122] px-3 py-1.5">
-                <div className="flex items-center gap-1.5">
-                  <IconSparkles size={12} stroke={1.7} className="text-white/45" />
-                  <p className="text-[10px] font-medium text-white/40">Sofía · Agente IA</p>
-                </div>
-                <p className="mt-1 text-[12px] leading-[1.4] text-white/75">
-                  Sí, hay stock. ¿Para qué comuna la necesitas?
-                </p>
-              </div>
-
-              <div className="max-w-[88%] rounded-xl rounded-tl-[4px] border border-white/[0.07] bg-[#171719] px-3 py-1.5">
-                <p className="text-[12px] leading-[1.4] text-white/70">
-                  Providencia, idealmente mañana.
-                </p>
-              </div>
-
-              <div className="ml-auto max-w-[92%] rounded-xl rounded-tr-[4px] border border-white/[0.08] bg-[#202122] px-3 py-1.5">
-                <div className="flex items-center gap-1.5">
-                  <IconSparkles size={12} stroke={1.7} className="text-white/45" />
-                  <p className="text-[10px] font-medium text-white/40">Sofía · Agente IA</p>
-                </div>
-                <p className="mt-1 text-[12px] leading-[1.4] text-white/75">
-                  Perfecto. Llega mañana de 14:00 a 18:00. ¿Te envío el link de pago?
-                </p>
-              </div>
-
-              <div className="max-w-[50%] rounded-xl rounded-tl-[4px] border border-white/[0.07] bg-[#171719] px-3 py-1.5">
-                <p className="text-[12px] leading-[1.4] text-white/70">Sí</p>
-              </div>
-            </div>
-
-            <div className="mt-2 flex shrink-0 items-center gap-2 rounded-lg border border-white/[0.07] bg-white/[0.025] px-3 py-2">
-              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#52CE5E]/10 text-[#52CE5E]/75">
-                <IconCheck size={12} stroke={2} />
-              </span>
-              <div className="min-w-0">
-                <p className="text-[11px] font-medium text-white/60">Lista para comprar</p>
-                <p className="truncate text-[10px] text-white/35">tienda.link/pago/cafetera-aura</p>
-              </div>
-            </div>
-          </Tabs.Content>
-
-          <Tabs.Content value="context" className="space-y-2 p-3 outline-none">
-            <div className="rounded-lg border border-white/[0.07] bg-white/[0.025] px-3 py-2.5">
-              <p className="text-[10px] text-white/30">Producto</p>
-              <p className="mt-0.5 text-[12px] font-medium text-white/70">Cafetera Aura</p>
-            </div>
-            <div className="rounded-lg border border-white/[0.07] bg-white/[0.025] px-3 py-2.5">
-              <p className="text-[10px] text-white/30">Entrega</p>
-              <p className="mt-0.5 text-[12px] font-medium text-white/70">09/12 · Providencia</p>
-            </div>
-            <div className="rounded-lg border border-white/[0.07] bg-white/[0.025] px-3 py-2.5">
-              <p className="text-[10px] text-white/30">Link de pago</p>
-              <a
-                href="#"
-                onClick={(event) => event.preventDefault()}
-                className="mt-0.5 block truncate text-[12px] font-medium text-white/80 underline underline-offset-2 decoration-white/35 hover:text-white hover:decoration-white/60"
-              >
-                tienda.link/pago/cafetera-aura
-              </a>
-            </div>
-          </Tabs.Content>
-        </Tabs.Root>
-      </Card>
-    </GlowFrame>
+    <div className={wide ? 'inquiry__wide' : 'inquiry__cell'}>
+      <div className="inquiry__card">
+        <div className="inquiry__mock">{children}</div>
+        <p className="inquiry__caption">
+          <span className="inquiry__caption-title">{title}.</span> {description}
+        </p>
+      </div>
+    </div>
   )
 }
 
-function CheckoutMockup() {
+const RECOMMENDED_PRODUCTS = [
+  { name: 'Cafetera Aura', price: '$84.990', img: 'prod-cafetera.png' },
+  { name: 'Molinillo Pro', price: '$39.990', img: 'prod-molinillo.png' },
+  { name: 'Pack Cápsulas', price: '$24.990', img: 'prod-capsulas.png' },
+] as const
+
+const NOISE_BG =
+  "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")"
+
+const PANEL_SHADOW = 'shadow-[0_10px_24px_-8px_rgba(0,0,0,0.65)]'
+const PANEL_BASE = 'border-white/[0.06] bg-gradient-to-b from-[#232427] to-[#161719]'
+const PANEL_TOP = 'border-white/[0.1] bg-gradient-to-b from-[#2b2c30] to-[#191a1c]'
+
+function MockShell({ children }: { children: ReactNode }) {
   return (
-    <GlowFrame background="fondo-glow-1080x1080@2x (7).webp" flushBottomLeft borderless>
-      <Card
-        icon={<IconCreditCard size={16} stroke={1.7} />}
-        title="Checkout · Pago"
-        status="Listo"
-        monochrome
-        cornerClass="rounded-tr-xl rounded-bl-xl"
-      >
-        <div className="flex h-full flex-col p-3.5">
-          <div className="flex items-center gap-2">
-            {['Carrito', 'Datos', 'Pago'].map((step, index) => (
-              <div key={step} className="flex min-w-0 flex-1 items-center gap-1.5">
-                <span
-                  className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[10px] font-semibold ${
-                    index === 2
-                      ? 'bg-white text-[#0C0C0D]'
-                      : 'border border-white/10 bg-white/[0.04] text-white/40'
-                  }`}
+    <div className="relative flex h-full flex-col overflow-hidden p-3.5">
+      <span
+        aria-hidden
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            'radial-gradient(130% 95% at 50% -15%, rgba(255,255,255,0.07), rgba(255,255,255,0) 58%)',
+        }}
+      />
+      <span
+        aria-hidden
+        className="pointer-events-none absolute inset-0 opacity-[0.05] mix-blend-soft-light"
+        style={{ backgroundImage: NOISE_BG, backgroundSize: '180px 180px' }}
+      />
+      <div className="relative z-10 flex min-h-0 flex-1 flex-col">{children}</div>
+    </div>
+  )
+}
+
+function MockHeader({ label, chip }: { label: string; chip?: string }) {
+  return (
+    <div className="flex shrink-0 items-center justify-between gap-2">
+      <p className="text-[12px] text-white/40">{label}</p>
+      {chip ? (
+        <span className="inline-flex items-center gap-1 rounded-full border border-white/[0.07] bg-white/[0.035] px-2 py-1 text-[10px] font-medium text-white/45">
+          <IconSparkles size={11} stroke={1.7} />
+          {chip}
+        </span>
+      ) : null}
+    </div>
+  )
+}
+
+function RecommendationMockup() {
+  return (
+    <Card monochrome hideHeader>
+      <MockShell>
+        <div className="flex min-h-0 flex-1 flex-col">
+          <div className="flex items-end justify-end gap-2">
+            <div
+              className={`max-w-[78%] rounded-2xl rounded-br-sm border px-3.5 py-2 ${PANEL_BASE}`}
+            >
+              <p className="text-[12px] leading-snug text-white/75">
+                ¿Qué cafetera me recomiendan para espresso en casa?
+              </p>
+            </div>
+            <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-white/[0.08] text-[9px] font-semibold text-white/55">
+              CM
+            </span>
+          </div>
+
+          <div className="mt-3 max-w-[86%]">
+            <div className="mb-1 flex items-center gap-1.5 pl-0.5">
+              <IconSparkles size={11} stroke={1.9} className="anim-pulse text-[#52CE5E]" />
+              <span className="text-[9px] font-semibold uppercase tracking-[0.09em] text-[#52CE5E]/80">
+                Adereso IA
+              </span>
+            </div>
+            <div className="rounded-2xl rounded-tl-sm border border-[#52CE5E]/25 bg-[#52CE5E]/[0.08] px-3.5 py-2">
+              <p className="text-[12px] leading-snug text-white/85">
+                Estas son nuestras favoritas para espresso:
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-3 grid grid-cols-3 gap-2">
+            {RECOMMENDED_PRODUCTS.map((product, i) => (
+              <div
+                key={product.name}
+                style={{ animationDelay: `${i * 1.3}s` }}
+                className={`anim-scan flex flex-col rounded-lg border p-1.5 ${PANEL_BASE} ${PANEL_SHADOW}`}
+              >
+                <div className="mb-2 overflow-hidden rounded-md bg-white">
+                  <img
+                    src={product.img}
+                    alt={product.name}
+                    className="aspect-square w-full object-cover"
+                  />
+                </div>
+                <p className="truncate text-[10px] font-medium text-white/80">{product.name}</p>
+                <p className="mt-0.5 text-[10px] text-white/45">{product.price}</p>
+                <button
+                  type="button"
+                  className="mt-2 flex items-center justify-center gap-1 rounded-md border border-white/15 bg-white/[0.04] py-1 text-[9px] font-medium text-white/60"
                 >
-                  {index < 2 ? <IconCheck size={12} stroke={2} /> : '3'}
-                </span>
-                <span
-                  className={`truncate text-[11px] ${
-                    index === 2 ? 'font-medium text-white/75' : 'text-white/35'
-                  }`}
-                >
-                  {step}
-                </span>
+                  <IconShoppingCart size={10} stroke={1.8} />
+                  Comprar
+                </button>
               </div>
             ))}
           </div>
+        </div>
+      </MockShell>
+    </Card>
+  )
+}
 
-          <div className="mt-4 rounded-xl border border-white/[0.07] bg-[#171719] p-3.5">
-            <div className="flex items-center gap-3">
-              <img
-                src="cafetera-aura.png"
-                alt=""
-                className="h-14 w-14 rounded-lg bg-white object-cover"
-              />
-              <div className="min-w-0 flex-1">
-                <p className="text-[14px] font-medium text-white/80">Cafetera Aura</p>
-                <p className="mt-0.5 text-[11px] text-white/35">Entrega 09/12 · Providencia</p>
+const CAFETERA_ITEM = {
+  name: 'Cafetera Aura',
+  variant: 'Negro mate',
+  price: '$84.990',
+  img: 'prod-cafetera.png',
+}
+
+// Loop: 0 → solo cafetera · 1 → aparece Pack (x1) · 2 → Pack sube a x2
+const CART_PHASES = [
+  { packQty: 0, packPrice: '$24.990', strike: '$84.990', total: '$76.491' },
+  { packQty: 1, packPrice: '$24.990', strike: '$109.980', total: '$98.982' },
+  { packQty: 2, packPrice: '$49.980', strike: '$134.970', total: '$121.473' },
+] as const
+
+const CART_PHASE_MS = [1500, 1600, 3000]
+
+function CartBuilderMockup() {
+  const [phase, setPhase] = useState(0)
+
+  useEffect(() => {
+    const t = setTimeout(() => setPhase((p) => (p + 1) % CART_PHASES.length), CART_PHASE_MS[phase])
+    return () => clearTimeout(t)
+  }, [phase])
+
+  const { packQty, packPrice, strike, total } = CART_PHASES[phase]
+  const packVisible = packQty > 0
+  const count = packVisible ? 2 : 1
+
+  return (
+    <Card monochrome hideHeader>
+      <MockShell>
+        <div className="flex shrink-0 items-center justify-between gap-2">
+          <div className="flex items-center gap-2">
+            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/[0.06] text-white/60">
+              <IconShoppingCart size={16} stroke={1.7} />
+            </span>
+            <div>
+              <p className="text-[13px] font-medium text-white/85">Carrito de Camila M.</p>
+              <p className="text-[10px] text-white/40">
+                {count} producto{count > 1 ? 's' : ''} · armado por IA
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-3 mb-3.5 flex flex-col">
+          <div
+            className={`flex items-center gap-2.5 rounded-xl border p-2 ${PANEL_BASE} ${PANEL_SHADOW}`}
+          >
+            <img
+              src={CAFETERA_ITEM.img}
+              alt={CAFETERA_ITEM.name}
+              className="h-10 w-10 shrink-0 rounded-md bg-white object-cover"
+            />
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-[12px] font-medium text-white/85">{CAFETERA_ITEM.name}</p>
+              <p className="truncate text-[10px] text-white/40">{CAFETERA_ITEM.variant}</p>
+            </div>
+            <div className="flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-1.5 py-1">
+              <IconMinus size={11} stroke={2} className="text-white/40" />
+              <span className="w-3 text-center text-[11px] font-medium text-white/70">1</span>
+              <IconPlus size={11} stroke={2} className="text-white/40" />
+            </div>
+            <span className="w-14 shrink-0 text-right text-[12px] font-semibold text-white/80">
+              {CAFETERA_ITEM.price}
+            </span>
+          </div>
+
+          <div className={`reveal-collapse${packVisible ? ' is-in' : ''}`}>
+            <div className="min-h-0">
+              <div
+                className={`reveal-row flex items-center gap-2.5 rounded-xl border p-2 ${PANEL_BASE} ${PANEL_SHADOW}`}
+              >
+                <img
+                  src="prod-capsulas.png"
+                  alt="Pack Cápsulas"
+                  className="h-10 w-10 shrink-0 rounded-md bg-white object-cover"
+                />
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-[12px] font-medium text-white/85">Pack Cápsulas</p>
+                  <p className="truncate text-[10px] text-white/40">Intenso · x100</p>
+                </div>
+                <div
+                  className={`flex items-center gap-2 rounded-full border px-1.5 py-1 ${
+                    phase === 2
+                      ? 'border-[#52CE5E]/40 bg-[#52CE5E]/[0.12]'
+                      : 'border-white/10 bg-white/[0.04]'
+                  }`}
+                >
+                  <IconMinus size={11} stroke={2} className="text-white/40" />
+                  <span
+                    key={packQty}
+                    className="qty-pop w-3 text-center text-[11px] font-medium text-white/70"
+                  >
+                    {packQty || 1}
+                  </span>
+                  <IconPlus
+                    size={11}
+                    stroke={2}
+                    className={phase === 2 ? 'text-[#52CE5E]' : 'text-white/40'}
+                  />
+                </div>
+                <span className="w-14 shrink-0 text-right text-[12px] font-semibold text-white/80">
+                  {packPrice}
+                </span>
               </div>
             </div>
           </div>
+        </div>
 
-          <div className="mt-3 space-y-2.5">
-            <div className="flex justify-between text-[13px] text-white/45">
-              <span>Producto</span>
-              <span className="text-white/70">$84.990</span>
-            </div>
-            <div className="flex justify-between text-[13px] text-white/45">
-              <span>Despacho</span>
-              <span className="text-white/70">Gratis</span>
-            </div>
-            <div className="flex justify-between border-t border-white/[0.07] pt-2.5 text-[15px] font-semibold text-white/85">
-              <span>Total</span>
-              <span>$84.990</span>
-            </div>
+        <div className={`mt-auto rounded-xl border p-3 ${PANEL_TOP} ${PANEL_SHADOW}`}>
+          <div className="flex items-center justify-between">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-[#52CE5E]/25 bg-[#52CE5E]/[0.1] px-2 py-0.5 text-[10px] font-medium text-[#52CE5E]/90">
+              <IconTag size={11} stroke={1.8} />
+              Cupón AURA10 · -10%
+            </span>
+            <span className="text-[11px] text-white/35 line-through">{strike}</span>
           </div>
-
+          <div className="mt-2 flex items-center justify-between border-t border-white/[0.08] pt-2">
+            <span className="text-[13px] font-medium text-white/70">Total</span>
+            <span
+              key={total}
+              className="val-pop text-[18px] font-semibold tracking-[-0.01em] text-white/90"
+            >
+              {total}
+            </span>
+          </div>
           <button
             type="button"
-            className="mt-auto rounded-full border border-white/20 bg-[#1a1a1c] px-4 py-3 text-[13px] font-medium text-white/70"
+            className="anim-cta mt-2.5 flex w-full items-center justify-center gap-1.5 rounded-full border border-white/15 bg-white/[0.06] py-2 text-[12px] font-medium text-white/75"
           >
-            Pagar ahora
+            <IconLink size={13} stroke={1.8} />
+            Generar link de pago
           </button>
         </div>
-      </Card>
-    </GlowFrame>
+      </MockShell>
+    </Card>
   )
 }
 
-function RecoveryMockup() {
-  return (
-    <GlowFrame background="fondo-glow-1080x1080@2x (4).webp" flushBottomRight borderless>
-      <Card
-        icon={<IconRefresh size={16} stroke={1.7} />}
-        title="Recuperación"
-        status="Automática"
-        monochrome
-        cornerClass="rounded-tl-xl rounded-br-xl"
-      >
-        <div className="flex h-full flex-col p-3.5">
-          <div className="rounded-xl border border-white/[0.07] bg-[#171719] p-3.5">
-            <div className="flex items-start justify-between gap-3">
-              <div className="min-w-0">
-                <p className="text-[11px] text-white/35">Carrito abandonado</p>
-                <p className="mt-1 text-[15px] font-medium text-white/80">María Soto</p>
-                <p className="mt-0.5 text-[13px] text-white/50">Cafetera Aura · $84.990</p>
-              </div>
-              <span className="shrink-0 rounded-full border border-white/[0.08] bg-white/[0.04] px-2.5 py-1 text-[11px] text-white/45">
-                hace 30 min
-              </span>
-            </div>
-          </div>
-
-          <div className="my-3 flex items-center gap-2 px-1">
-            <span className="h-px flex-1 bg-white/[0.08]" />
-            <IconSend size={14} stroke={1.6} className="text-white/30" />
-            <span className="h-px flex-1 bg-white/[0.08]" />
-          </div>
-
-          <div className="rounded-xl border border-white/[0.08] bg-[#202122] p-3.5">
-            <div className="flex items-center gap-2">
-              <IconBrandWhatsapp size={14} stroke={1.8} className="text-[#52CE5E]/75" />
-              <p className="text-[12px] font-medium text-white/55">WhatsApp enviado</p>
-            </div>
-            <p className="mt-2 text-[13px] leading-[1.45] text-white/75">
-              María, guardamos tu Cafetera Aura. ¿Quieres retomar la compra?
-            </p>
-            <div className="mt-3 rounded-full border border-white/20 bg-[#1a1a1c] px-4 py-2.5 text-center text-[12px] font-medium text-white/65">
-              Retomar compra
-            </div>
-          </div>
-
-          <div className="mt-auto flex items-center justify-between rounded-lg border border-white/[0.07] bg-white/[0.025] px-3.5 py-2.5">
-            <p className="text-[12px] text-white/40">Carritos recuperados</p>
-            <p className="text-[20px] font-semibold text-white/85">35%</p>
-          </div>
-        </div>
-      </Card>
-    </GlowFrame>
-  )
-}
-
-const SALE_STAGES = [
+const LEADS = [
   {
-    id: 'ad',
-    label: 'Ad',
-    title: 'Anuncio de producto',
-    detail: 'Campaña en Instagram · 12.480 impresiones',
-    metric: '4,8% CTR',
+    name: 'Camila M.',
+    channel: 'WhatsApp · Intención de compra',
+    initials: 'CM',
+    score: 92,
+    temp: 'Caliente',
+    accent: '#FF7A59',
+    top: true,
   },
   {
-    id: 'query',
-    label: 'Consulta',
-    title: 'Conversación iniciada',
-    detail: 'El agente entiende necesidad, presupuesto y contexto',
-    metric: '1,2s respuesta',
+    name: 'Rodrigo P.',
+    channel: 'Instagram · Consulta de precio',
+    initials: 'RP',
+    score: 64,
+    temp: 'Tibio',
+    accent: '#FFD540',
+    top: false,
   },
   {
-    id: 'recommendation',
-    label: 'Recomendación',
-    title: 'Producto recomendado',
-    detail: 'Pack Empresa Aura basado en stock y perfil',
-    metric: '82% match',
-  },
-  {
-    id: 'cart',
-    label: 'Carrito',
-    title: 'Carrito creado',
-    detail: 'Productos y descuento agregados automáticamente',
-    metric: '$189.900',
-  },
-  {
-    id: 'payment',
-    label: 'Pago',
-    title: 'Compra confirmada',
-    detail: 'Pago aprobado y pedido sincronizado',
-    metric: 'Convertido',
+    name: 'Valentina S.',
+    channel: 'Webchat · Explorando',
+    initials: 'VS',
+    score: 38,
+    temp: 'Frío',
+    accent: '#5B9BFF',
+    top: false,
   },
 ] as const
 
-function JourneyFlow({
-  title,
-  subtitle,
-  stages,
-  background = 'fondo-glow-helpdesk.webp',
-}: {
-  title: string
-  subtitle: string
-  stages: readonly { id: string; label: string; title: string; detail: string; metric: string }[]
-  background?: string
-}) {
+function LeadScoreMockup() {
   return (
-    <GlowFrame background={background}>
-      <Card
-        icon={<IconSparkles size={16} stroke={1.7} />}
-        title={title}
-        status="Flujo activo"
-        monochrome
-      >
-        <div className="flex h-full min-h-0 flex-col p-4">
-          <div className="flex shrink-0 items-center justify-between gap-4">
-            <p className="text-[13px] text-white/45">{subtitle}</p>
-            <p className="text-[11px] text-white/30">{stages.length} etapas conectadas</p>
-          </div>
-
-          <div className="relative mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-5">
-            {stages.map((stage, index) => (
-              <article
-                key={stage.id}
-                className="relative flex min-w-0 flex-col rounded-xl border border-white/[0.08] bg-[#141415]/95 p-4"
-              >
-                {index < stages.length - 1 && (
-                  <span className="absolute top-7 -right-[13px] z-10 hidden h-5 w-5 items-center justify-center rounded-full border border-white/[0.08] bg-[#181819] lg:flex">
-                    <IconArrowRight size={11} stroke={1.5} className="text-white/30" />
-                  </span>
-                )}
-
-                <div className="flex items-center justify-between gap-2">
-                  <span className="flex h-8 w-8 items-center justify-center rounded-full border border-white/[0.1] bg-white/[0.04] text-[11px] font-semibold text-white/65">
-                    {String(index + 1).padStart(2, '0')}
-                  </span>
-                  <span className="text-[11px] font-medium text-white/40">{stage.label}</span>
+    <Card monochrome hideHeader>
+      <MockShell>
+        <MockHeader label="Leads calificados" />
+        <div className="leads-list mt-3 flex min-h-0 flex-1 flex-col justify-between gap-2.5">
+          {LEADS.map((lead) => (
+            <div
+              key={lead.name}
+              className={`rounded-xl border px-3 py-2.5 ${lead.top ? PANEL_TOP : PANEL_BASE} ${PANEL_SHADOW}`}
+            >
+              <div className="flex items-center gap-2.5">
+                <span
+                  className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-[11px] font-semibold"
+                  style={{ backgroundColor: `${lead.accent}1A`, color: lead.accent }}
+                >
+                  {lead.initials}
+                </span>
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-[13px] font-medium text-white/85">{lead.name}</p>
+                  <p className="truncate text-[10px] text-white/40">{lead.channel}</p>
                 </div>
-
-                <h4 className="mt-3 text-[15px] leading-[1.25] font-semibold text-white/85">
-                  {stage.title}
-                </h4>
-                <p className="mt-1.5 text-[12px] leading-[1.45] text-white/45">{stage.detail}</p>
-
-                <div className="mt-4 border-t border-white/[0.07] pt-3">
-                  <p className="text-[11px] text-white/30">Resultado</p>
-                  <p className="mt-1 text-[18px] font-semibold tracking-[-0.02em] text-white/80">
-                    {stage.metric}
-                  </p>
+                <span
+                  className="inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-medium"
+                  style={{
+                    borderColor: `${lead.accent}33`,
+                    backgroundColor: `${lead.accent}14`,
+                    color: lead.accent,
+                  }}
+                >
+                  {lead.temp}
+                </span>
+              </div>
+              <div className="mt-2.5 flex items-center gap-2.5">
+                <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-white/[0.07]">
+                  <div
+                    className="anim-bar h-full rounded-full"
+                    style={{
+                      width: `${lead.score}%`,
+                      backgroundColor: lead.accent,
+                    }}
+                  />
                 </div>
-              </article>
-            ))}
-          </div>
+                <span className="w-6 text-right text-[12px] font-semibold tabular-nums text-white/75">
+                  {lead.score}
+                </span>
+              </div>
+            </div>
+          ))}
         </div>
-      </Card>
-    </GlowFrame>
+      </MockShell>
+    </Card>
   )
 }
 
-function TrackingMockup() {
+const APPT_DATES = [
+  { weekday: 'Lun', day: '12' },
+  { weekday: 'Mar', day: '13' },
+  { weekday: 'Mié', day: '14', selected: true },
+  { weekday: 'Jue', day: '15' },
+  { weekday: 'Vie', day: '16' },
+] as const
+
+const APPT_TIMES = ['09:00', '10:30', '12:00', '15:30', '17:00', '18:30'] as const
+const APPT_SELECTED_DAY = '14'
+const APPT_SELECTED_TIME = '10:30'
+
+// Loop: 0 idle → 1 elige día → 2 elige hora → 3 cita confirmada
+const APPT_PHASE_MS = [450, 620, 720, 2200]
+
+function AppointmentMockup() {
+  const [phase, setPhase] = useState(0)
+
+  useEffect(() => {
+    const t = setTimeout(() => setPhase((p) => (p + 1) % APPT_PHASE_MS.length), APPT_PHASE_MS[phase])
+    return () => clearTimeout(t)
+  }, [phase])
+
+  const dayPicked = phase >= 1
+  const timePicked = phase >= 2
+  const confirmed = phase >= 3
+
   return (
-    <GlowFrame background="fondo-glow-postventa3.webp" flushBottomRight borderless>
-      <Card
-        icon={<IconTruck size={16} stroke={1.7} />}
-        title="Tracking"
-        status="En tránsito"
-        monochrome
-        cornerClass="rounded-tl-xl rounded-br-xl"
-      >
-        <div className="flex h-full flex-col p-3.5">
-          <div className="rounded-xl border border-white/[0.07] bg-[#171719] p-3.5">
-            <div className="flex items-start justify-between gap-3">
-              <div>
-                <p className="text-[11px] text-white/35">Pedido #1042</p>
-                <p className="mt-1 text-[15px] font-medium text-white/80">Llega hoy · 14:00–16:00</p>
-                <p className="mt-0.5 text-[12px] text-white/45">Cafetera Aura · Providencia</p>
-              </div>
-              <IconTruck size={18} stroke={1.5} className="shrink-0 text-white/40" />
-            </div>
-            <div className="mt-4 h-1 rounded-full bg-white/[0.06]">
-              <div className="h-full w-[76%] rounded-full bg-white/40" />
-            </div>
+    <Card monochrome hideHeader>
+      <MockShell>
+        <div className="flex shrink-0 items-center gap-2.5">
+          <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-white/[0.06] text-white/60">
+            <IconCalendarEvent size={17} stroke={1.7} />
+          </span>
+          <div className="min-w-0 flex-1">
+            <p className="text-[13px] font-medium text-white/85">Agendar con Camila M.</p>
+            <p className="text-[10px] text-white/40">WhatsApp · Asesoría de compra</p>
           </div>
+          <span className="inline-flex items-center gap-1 rounded-full border border-white/[0.07] bg-white/[0.035] px-2 py-1 text-[10px] font-medium text-white/45">
+            <IconSparkles size={11} stroke={1.7} />
+            IA
+          </span>
+        </div>
 
-          <div className="mt-3 space-y-0">
-            {[
-              ['Pedido confirmado', '09:12', true],
-              ['En camino', '13:05', true],
-              ['Entregado', 'Próximo', false],
-            ].map(([label, time, done], index, list) => (
-              <div key={label as string} className="relative flex items-center gap-2.5 pb-3">
-                {index < list.length - 1 && (
-                  <span className="absolute top-4 bottom-0 left-[7px] w-px bg-white/[0.07]" />
-                )}
+        <p className="mt-3.5 text-[11px] text-white/40">Diciembre 2025</p>
+        <div className="mt-1.5 grid grid-cols-5 gap-1.5">
+          {APPT_DATES.map((date) => {
+            const selected = dayPicked && date.day === APPT_SELECTED_DAY
+            return (
+              <button
+                key={date.day}
+                type="button"
+                className={`flex flex-col items-center rounded-lg border py-1.5 ${
+                  selected
+                    ? 'appt-pick border-[#52CE5E]/35 bg-[#52CE5E]/[0.12]'
+                    : `${PANEL_BASE}`
+                }`}
+              >
+                <span className="text-[9px] text-white/45">{date.weekday}</span>
                 <span
-                  className={`relative z-10 h-3.5 w-3.5 rounded-full border ${
-                    done
-                      ? 'border-[#52CE5E]/30 bg-[#52CE5E]/20'
-                      : 'border-white/10 bg-[#131415]'
+                  className={`text-[13px] font-semibold ${
+                    selected ? 'text-[#52CE5E]' : 'text-white/80'
                   }`}
-                />
-                <p className="text-[13px] text-white/65">{label as string}</p>
-                <span className="ml-auto text-[11px] text-white/30">{time as string}</span>
-              </div>
-            ))}
-          </div>
+                >
+                  {date.day}
+                </span>
+              </button>
+            )
+          })}
+        </div>
 
-          <div className="mt-auto flex items-center gap-2 rounded-lg border border-white/[0.07] bg-white/[0.025] px-3 py-2.5">
-            <IconBrandWhatsapp size={14} stroke={1.8} className="text-[#52CE5E]/75" />
-            <p className="text-[12px] font-medium text-white/60">Cliente notificado por WhatsApp</p>
+        <p className="mt-3.5 text-[11px] text-white/40">Horarios disponibles</p>
+        <div className="mt-1.5 grid grid-cols-3 gap-1.5">
+          {APPT_TIMES.map((time) => {
+            const selected = timePicked && time === APPT_SELECTED_TIME
+            return (
+              <button
+                key={time}
+                type="button"
+                className={`rounded-lg border py-1.5 text-center text-[11px] font-medium ${
+                  selected
+                    ? 'appt-pick border-[#52CE5E]/35 bg-[#52CE5E]/[0.12] text-[#52CE5E]'
+                    : `${PANEL_BASE} text-white/55`
+                }`}
+              >
+                {time}
+              </button>
+            )
+          })}
+        </div>
+
+        <div className={`reveal-collapse mt-auto${confirmed ? ' is-in' : ''}`}>
+          <div className="min-h-0">
+            <div
+              className={`reveal-row flex items-center gap-2.5 rounded-xl border p-3 ${PANEL_TOP} ${PANEL_SHADOW}`}
+            >
+              <span className="anim-pulse flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#52CE5E]/10 text-[#52CE5E]">
+                <IconCalendarCheck size={16} stroke={1.8} />
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="text-[12px] font-medium text-white/85">
+                  Cita confirmada · Mié 14, 10:30
+                </p>
+                <p className="mt-0.5 flex items-center gap-1 text-[10px] text-white/40">
+                  <IconBrandWhatsapp size={11} stroke={1.8} className="text-[#52CE5E]/75" />
+                  Recordatorio enviado por WhatsApp
+                </p>
+              </div>
+            </div>
           </div>
         </div>
-      </Card>
-    </GlowFrame>
+      </MockShell>
+    </Card>
+  )
+}
+
+const APPT_FEATURES = [
+  'Muestra solo los horarios disponibles',
+  'Sincroniza y agenda en tu calendario',
+  'Recordatorios automáticos por WhatsApp',
+] as const
+
+function AppointmentFeatureCell() {
+  return (
+    <div className="inquiry__wide">
+      <div className="inquiry__card inquiry__card--split">
+        <div className="inquiry__split-mock">
+          <AppointmentMockup />
+        </div>
+        <div className="inquiry__split-copy">
+          <span className="inline-flex w-fit items-center rounded-full border border-white/[0.08] bg-white/[0.04] px-2.5 py-1 text-[11px] font-medium text-white/50">
+            Agenda citas
+          </span>
+          <h3 className="mt-3 text-[clamp(20px,2.2vw,28px)] font-medium leading-[1.15] tracking-[-0.02em] text-white/90">
+            Reserva y confirma citas sin fricción
+          </h3>
+          <p className="mt-2.5 max-w-[46ch] text-[15.5px] leading-relaxed text-white/55">
+            El agente ofrece los horarios disponibles, agenda directo en tu calendario y envía
+            recordatorios por WhatsApp para reducir las inasistencias.
+          </p>
+          <ul className="mt-4 space-y-2">
+            {APPT_FEATURES.map((feature) => (
+              <li key={feature} className="flex items-center gap-2 text-[13px] text-white/70">
+                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#52CE5E]/[0.12] text-[#52CE5E]">
+                  <IconCheck size={12} stroke={2.2} />
+                </span>
+                {feature}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function TechSupportMockup() {
+  return (
+    <Card monochrome hideHeader>
+      <MockShell>
+        <div className="flex shrink-0 items-center gap-2.5">
+          <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-white/[0.06] text-white/60">
+            <IconHeadset size={17} stroke={1.7} />
+          </span>
+          <div className="min-w-0 flex-1">
+            <p className="text-[13px] font-medium text-white/85">Soporte · Camila M.</p>
+            <p className="text-[10px] text-white/40">WhatsApp · Falla técnica</p>
+          </div>
+          <span className="inline-flex items-center gap-1 rounded-full border border-white/[0.07] bg-white/[0.035] px-2 py-1 text-[10px] font-medium text-white/45">
+            <IconSparkles size={11} stroke={1.7} />
+            IA
+          </span>
+        </div>
+
+        <div className="mt-3 flex min-h-0 flex-1 flex-col">
+          <div className="flex items-end justify-end gap-2">
+            <div className={`max-w-[80%] rounded-2xl rounded-br-sm border px-3 py-2 ${PANEL_BASE}`}>
+              <p className="text-[12px] leading-snug text-white/75">
+                Mi Cafetera Aura no enciende después de la actualización 😕
+              </p>
+            </div>
+            <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-white/[0.08] text-[9px] font-semibold text-white/55">
+              CM
+            </span>
+          </div>
+
+          <div className="mt-3 max-w-[86%]">
+            <div className="mb-1 flex items-center gap-1.5 pl-0.5">
+              <IconSparkles size={11} stroke={1.9} className="text-[#52CE5E]" />
+              <span className="text-[9px] font-semibold uppercase tracking-[0.09em] text-[#52CE5E]/80">
+                Adereso IA
+              </span>
+            </div>
+            <div className="rounded-2xl rounded-tl-sm border border-[#52CE5E]/25 bg-[#52CE5E]/[0.08] px-3 py-2">
+              <p className="text-[12px] leading-snug text-white/85">
+                Hice un diagnóstico rápido y tu equipo requiere revisión técnica. Te derivo con un
+                especialista.
+              </p>
+            </div>
+          </div>
+
+          <div
+            className={`mt-3 flex items-center gap-2.5 rounded-xl border p-2.5 ${PANEL_TOP} ${PANEL_SHADOW}`}
+          >
+            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#52CE5E]/10 text-[#52CE5E]">
+              <IconHeadset size={15} stroke={1.8} />
+            </span>
+            <div className="min-w-0 flex-1">
+              <p className="text-[12px] font-medium text-white/85">Derivado a un especialista</p>
+              <p className="text-[10px] text-white/40">La IA escaló el caso con todo el contexto</p>
+            </div>
+          </div>
+
+          <div className="mt-3 flex items-end gap-2">
+            <span className="relative flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#5B9BFF]/20 text-[9px] font-semibold text-[#5B9BFF]">
+              DR
+              <span className="absolute -right-0.5 -bottom-0.5 h-2 w-2 rounded-full border border-[#0a0a0b] bg-[#52CE5E]" />
+            </span>
+            <div className={`max-w-[82%] rounded-2xl rounded-bl-sm border px-3 py-2 ${PANEL_BASE}`}>
+              <p className="text-[9px] font-medium text-[#5B9BFF]/80">Diego R. · Especialista</p>
+              <p className="mt-0.5 text-[12px] leading-snug text-white/80">
+                Hola Camila, ya tengo tu caso. Activo la garantía y coordinamos la visita.
+              </p>
+            </div>
+          </div>
+        </div>
+      </MockShell>
+    </Card>
+  )
+}
+
+const SUPPORT_FEATURES = [
+  'Diagnóstico y respuestas automáticas 24/7',
+  'Deriva al especialista con todo el contexto',
+  'El cliente no repite información ni pierde el hilo',
+] as const
+
+function TechSupportFeatureCell() {
+  return (
+    <div className="inquiry__wide">
+      <div className="inquiry__card inquiry__card--split">
+        <div className="inquiry__split-mock">
+          <TechSupportMockup />
+        </div>
+        <div className="inquiry__split-copy">
+          <span className="inline-flex w-fit items-center rounded-full border border-white/[0.08] bg-white/[0.04] px-2.5 py-1 text-[11px] font-medium text-white/50">
+            Soporte técnico asistido
+          </span>
+          <h3 className="mt-3 text-[clamp(20px,2.2vw,28px)] font-medium leading-[1.15] tracking-[-0.02em] text-white/90">
+            Resuelve con IA y deriva a un experto cuando hace falta
+          </h3>
+          <p className="mt-2.5 max-w-[46ch] text-[15.5px] leading-relaxed text-white/55">
+            La IA atiende y resuelve las consultas técnicas, y cuando se necesita intervención
+            humana deriva al especialista con todo el contexto de la conversación.
+          </p>
+          <ul className="mt-4 space-y-2">
+            {SUPPORT_FEATURES.map((feature) => (
+              <li key={feature} className="flex items-center gap-2 text-[13px] text-white/70">
+                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#52CE5E]/[0.12] text-[#52CE5E]">
+                  <IconCheck size={12} stroke={2.2} />
+                </span>
+                {feature}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+const TRACKING_STEPS = [
+  { label: 'Pedido confirmado', time: '09:12', done: true },
+  { label: 'En preparación', time: '11:40', done: true },
+  { label: 'En camino', time: '13:05', done: true, current: true },
+  { label: 'Entregado', time: 'Próximo', done: false },
+] as const
+
+function TrackingMockup() {
+  return (
+    <Card monochrome hideHeader>
+      <MockShell>
+        <div className="flex shrink-0 items-center justify-between gap-2">
+          <div className="flex items-center gap-2">
+            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/[0.06] text-white/60">
+              <IconTruck size={16} stroke={1.7} />
+            </span>
+            <div>
+              <p className="text-[13px] font-medium text-white/85">Pedido #1042</p>
+              <p className="text-[10px] text-white/40">Cafetera Aura · Providencia</p>
+            </div>
+          </div>
+          <span className="inline-flex items-center gap-1 rounded-full border border-[#52CE5E]/25 bg-[#52CE5E]/[0.1] px-2 py-1 text-[10px] font-medium text-[#52CE5E]/90">
+            En tránsito
+          </span>
+        </div>
+
+        <div className={`mt-3 rounded-xl border p-3 ${PANEL_TOP} ${PANEL_SHADOW}`}>
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-[10px] text-white/35">Entrega estimada</p>
+              <p className="mt-0.5 text-[14px] font-medium text-white/85">Hoy · 14:00–16:00</p>
+            </div>
+            <span className="text-[12px] font-semibold text-white/60">76%</span>
+          </div>
+          <div className="mt-2.5 h-1.5 overflow-hidden rounded-full bg-white/[0.07]">
+            <div className="h-full rounded-full bg-[#52CE5E]/70" style={{ width: '76%' }} />
+          </div>
+        </div>
+
+        <div className="mt-3">
+          {TRACKING_STEPS.map((step, index, list) => (
+            <div
+              key={step.label}
+              className="relative flex items-center gap-2.5 pb-2.5 last:pb-0"
+            >
+              {index < list.length - 1 && (
+                <span className="absolute top-4 bottom-0 left-[6.5px] w-px bg-white/[0.08]" />
+              )}
+              <span
+                className={`relative z-10 flex h-3.5 w-3.5 shrink-0 items-center justify-center rounded-full border ${
+                  step.done
+                    ? 'border-[#52CE5E]/40 bg-[#52CE5E]/25'
+                    : 'border-white/12 bg-[#151517]'
+                }`}
+              >
+                {'current' in step && step.current && (
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#52CE5E]" />
+                )}
+              </span>
+              <p
+                className={`text-[12px] ${
+                  'current' in step && step.current
+                    ? 'font-medium text-white/85'
+                    : step.done
+                      ? 'text-white/70'
+                      : 'text-white/40'
+                }`}
+              >
+                {step.label}
+              </p>
+              <span className="ml-auto text-[10px] text-white/30">{step.time}</span>
+            </div>
+          ))}
+        </div>
+
+        <div
+          className={`mt-auto flex items-center gap-2.5 rounded-xl border p-2.5 ${PANEL_TOP} ${PANEL_SHADOW}`}
+        >
+          <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#52CE5E]/10 text-[#52CE5E]">
+            <IconBrandWhatsapp size={14} stroke={1.8} />
+          </span>
+          <p className="text-[12px] font-medium text-white/60">Cliente notificado por WhatsApp</p>
+        </div>
+      </MockShell>
+    </Card>
   )
 }
 
 function ReturnMockup() {
   return (
-    <GlowFrame background="fondo-glow-postventa8.webp" flushBottomLeft borderless>
-      <Card
-        icon={<IconRefresh size={16} stroke={1.7} />}
-        title="Devolución"
-        status="Autogestión"
-        monochrome
-        cornerClass="rounded-tr-xl rounded-bl-xl"
-      >
+    <Card
+      icon={<IconRefresh size={16} stroke={1.7} />}
+      title="Devolución"
+      status="Autogestión"
+      monochrome
+    >
         <div className="flex h-full flex-col p-3.5">
           <p className="text-[12px] text-white/40">¿Qué ocurrió con tu pedido?</p>
 
@@ -552,122 +836,87 @@ function ReturnMockup() {
             </div>
           </div>
         </div>
-      </Card>
-    </GlowFrame>
+    </Card>
   )
 }
 
-function ReorderMockup() {
+const SURVEY_STEPS = ['Nombre', 'Envío', 'Preguntas', 'Agradecimiento'] as const
+
+function SurveyMockup() {
   return (
-    <GlowFrame background="fondo-glow-postventa1.webp" flushBottomRight borderless>
-      <Card
-        icon={<IconRepeat size={16} stroke={1.7} />}
-        title="Recompra"
-        status="Programada"
-        monochrome
-        cornerClass="rounded-tl-xl rounded-br-xl"
-      >
-        <div className="flex h-full flex-col p-3.5">
-          <div className="rounded-xl border border-white/[0.07] bg-[#171719] p-3.5">
-            <div className="flex items-center gap-3">
-              <img
-                src="cafetera-aura.png"
-                alt=""
-                className="h-14 w-14 rounded-lg bg-white object-cover"
-              />
-              <div className="min-w-0">
-                <p className="text-[14px] font-medium text-white/80">Cápsulas Aura · Pack 100</p>
-                <p className="mt-0.5 text-[12px] text-white/40">Se agotan en ~3 días</p>
+    <Card monochrome hideHeader>
+      <MockShell>
+        <div className={`rounded-xl border p-3 ${PANEL_BASE} ${PANEL_SHADOW}`}>
+          <div className="flex items-center justify-between gap-2">
+            <p className="text-[12px] font-medium text-white/85">Nueva encuesta</p>
+            <span className="inline-flex items-center gap-1 rounded-full border border-white/[0.07] bg-white/[0.035] px-2 py-0.5 text-[9px] font-medium text-white/45">
+              <IconSparkles size={10} stroke={1.8} />
+              Auto
+            </span>
+          </div>
+          <div className="mt-2 space-y-1.5">
+            {SURVEY_STEPS.map((label, i) => (
+              <div
+                key={label}
+                className={`flex items-center gap-2 rounded-lg border px-2.5 py-1.5 ${PANEL_TOP}`}
+              >
+                <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-[#52CE5E]/15 text-[#52CE5E]">
+                  <IconCheck size={10} stroke={2.6} />
+                </span>
+                <span className="text-[11px] text-white/70">
+                  Paso {i + 1}: {label}
+                </span>
               </div>
-            </div>
-          </div>
-
-          <div className="my-3 flex items-center gap-2 px-1">
-            <span className="h-px flex-1 bg-white/[0.08]" />
-            <IconSend size={14} stroke={1.6} className="text-white/30" />
-            <span className="h-px flex-1 bg-white/[0.08]" />
-          </div>
-
-          <div className="rounded-xl border border-white/[0.08] bg-[#202122] p-3.5">
-            <div className="flex items-center gap-2">
-              <IconBrandWhatsapp size={14} stroke={1.8} className="text-[#52CE5E]/75" />
-              <p className="text-[12px] font-medium text-white/55">WhatsApp programado</p>
-            </div>
-            <p className="mt-2 text-[13px] leading-[1.45] text-white/75">
-              Es hora de reponer tus cápsulas. ¿Quieres repetir el pedido?
-            </p>
-            <div className="mt-3 rounded-full border border-white/20 bg-[#1a1a1c] px-4 py-2.5 text-center text-[12px] font-medium text-white/65">
-              Repetir pedido
-            </div>
-          </div>
-
-          <div className="mt-auto flex items-center justify-between rounded-lg border border-white/[0.07] bg-white/[0.025] px-3.5 py-2.5">
-            <p className="text-[12px] text-white/40">Conversión histórica</p>
-            <p className="text-[20px] font-semibold text-white/85">41%</p>
+            ))}
           </div>
         </div>
-      </Card>
-    </GlowFrame>
+
+        <div className="mt-3 flex items-end gap-2">
+          <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#52CE5E]/15 text-[#52CE5E]">
+            <IconSparkles size={13} stroke={1.7} />
+          </span>
+          <div className="min-w-0 flex-1 rounded-2xl rounded-bl-sm border border-[#52CE5E]/25 bg-[#52CE5E]/[0.1] p-2">
+            <div className="overflow-hidden rounded-lg bg-white">
+              <img src="prod-cafetera.png" alt="" className="h-16 w-full object-cover" />
+            </div>
+            <p className="mt-2 px-1 text-[12px] leading-snug text-white/85">
+              Nos gustaría saber tu opinión. ¿Quieres calificar tu compra?
+            </p>
+            <div className="mt-2 border-t border-white/10">
+              <p className="border-b border-white/10 py-1.5 text-center text-[12.5px] font-medium text-[#52CE5E]">
+                Sí
+              </p>
+              <p className="py-1.5 text-center text-[12.5px] font-medium text-white/55">No</p>
+            </div>
+          </div>
+        </div>
+      </MockShell>
+    </Card>
   )
 }
-
-const POST_SALE_STAGES = [
-  {
-    id: 'order',
-    label: 'Pedido',
-    title: 'Compra confirmada',
-    detail: 'Pedido #1042 sincronizado con Shopify',
-    metric: 'Confirmado',
-  },
-  {
-    id: 'tracking',
-    label: 'Tracking',
-    title: 'Seguimiento proactivo',
-    detail: 'Notificaciones automáticas en cada cambio de estado',
-    metric: '4 eventos',
-  },
-  {
-    id: 'support',
-    label: 'Soporte',
-    title: 'Resolución sin fricción',
-    detail: 'IA responde y escala excepciones con todo el contexto',
-    metric: '92% autónomo',
-  },
-  {
-    id: 'return',
-    label: 'Devolución',
-    title: 'Devolución autogestionada',
-    detail: 'Validación, etiqueta y reembolso en el mismo flujo',
-    metric: '3 min',
-  },
-  {
-    id: 'reorder',
-    label: 'Recompra',
-    title: 'Recompra activada',
-    detail: 'Recordatorio personalizado según consumo estimado',
-    metric: '41% conversión',
-  },
-] as const
 
 export function SalesJourneyGrid() {
   return (
     <>
-      <div className="inquiry__cell">
-        <ConsultationMockup />
-      </div>
-      <div className="inquiry__cell">
-        <CheckoutMockup />
-      </div>
-      <div className="inquiry__cell">
-        <RecoveryMockup />
-      </div>
-      <div className="inquiry__wide">
-        <JourneyFlow
-          title="De anuncio a pago"
-          subtitle="Cada etapa comparte contexto, datos y métricas"
-          stages={SALE_STAGES}
-        />
-      </div>
+      <BentoCell
+        title="Recomienda productos"
+        description="La IA sugiere el producto ideal según la consulta, el stock y el perfil de cada cliente."
+      >
+        <RecommendationMockup />
+      </BentoCell>
+      <BentoCell
+        title="Arma carritos"
+        description="Crea el carrito con productos, cantidades y descuentos listos para pagar, sin intervención manual."
+      >
+        <CartBuilderMockup />
+      </BentoCell>
+      <BentoCell
+        title="Califica leads"
+        description="La IA puntúa y prioriza cada conversación según intención y probabilidad de compra."
+      >
+        <LeadScoreMockup />
+      </BentoCell>
+      <AppointmentFeatureCell />
     </>
   )
 }
@@ -675,23 +924,25 @@ export function SalesJourneyGrid() {
 export function PostSaleJourneyGrid() {
   return (
     <>
-      <div className="inquiry__cell">
+      <BentoCell
+        title="Seguimiento proactivo"
+        description="Notifica al cliente en cada cambio de estado del pedido, sin que tenga que preguntar."
+      >
         <TrackingMockup />
-      </div>
-      <div className="inquiry__cell">
+      </BentoCell>
+      <BentoCell
+        title="Devoluciones autogestionadas"
+        description="El cliente resuelve su cambio o reembolso solo, con validación automática."
+      >
         <ReturnMockup />
-      </div>
-      <div className="inquiry__cell">
-        <ReorderMockup />
-      </div>
-      <div className="inquiry__wide">
-        <JourneyFlow
-          title="De entrega a recompra"
-          subtitle="Postventa conectada para fidelizar y volver a vender"
-          stages={POST_SALE_STAGES}
-          background="fondo-glow-1600x900@2x (10).webp"
-        />
-      </div>
+      </BentoCell>
+      <BentoCell
+        title="Envía encuestas de satisfacción"
+        description="Crea y envía encuestas por WhatsApp tras la entrega para medir la satisfacción del cliente."
+      >
+        <SurveyMockup />
+      </BentoCell>
+      <TechSupportFeatureCell />
     </>
   )
 }

@@ -453,10 +453,9 @@ export default function App() {
         <div className="container">
           <div className="inquiry-intro">
             <div className="inquiry-intro__copy">
-              <h2 className="inquiry-intro__title">De la consulta a la recompra</h2>
+              <h2 className="inquiry-intro__title">Venta y postventa en un solo sistema</h2>
               <p className="inquiry-intro__desc">
-                Adereso cubre venta y postventa en el mismo sistema. Sin herramientas separadas, sin
-                perder contexto entre etapas.
+                Sin herramientas separadas ni pérdida de contexto entre etapas.
               </p>
               <div className="inquiry-intro__actions" role="tablist" aria-label="Venta o postventa">
                 <button

@@ -152,7 +152,6 @@ export function IntegrationMap() {
         ))}
 
         <g className="integration-orbit__center">
-          <circle cx={CENTER.x} cy={CENTER.y} r="76" className="integration-orbit__ring" />
           <g className="integration-orbit__center-float">
             <rect
               x={CENTER.x - 52}
