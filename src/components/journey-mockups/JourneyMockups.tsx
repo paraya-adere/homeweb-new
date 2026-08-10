@@ -613,8 +613,8 @@ function TechSupportMockup() {
 
         <div className="mt-3 flex min-h-0 flex-1 flex-col">
           <div className="flex items-end justify-end gap-2">
-            <div className={`max-w-[80%] rounded-2xl rounded-br-sm border px-3 py-2 ${PANEL_BASE}`}>
-              <p className="text-[12px] leading-snug text-white/75">
+            <div className={`max-w-[80%] rounded-2xl rounded-br-sm border px-3.5 py-2.5 ${PANEL_BASE}`}>
+              <p className="text-[14px] leading-snug text-white/80">
                 Mi Cafetera Aura no enciende después de la actualización 😕
               </p>
             </div>
@@ -625,13 +625,13 @@ function TechSupportMockup() {
 
           <div className="mt-3 max-w-[86%]">
             <div className="mb-1 flex items-center gap-1.5 pl-0.5">
-              <IconSparkles size={11} stroke={1.9} className="text-[#52CE5E]" />
-              <span className="text-[9px] font-semibold uppercase tracking-[0.09em] text-[#52CE5E]/80">
+              <IconSparkles size={12} stroke={1.9} className="text-[#52CE5E]" />
+              <span className="text-[10px] font-semibold uppercase tracking-[0.09em] text-[#52CE5E]/80">
                 Adereso IA
               </span>
             </div>
-            <div className="rounded-2xl rounded-tl-sm border border-[#52CE5E]/25 bg-[#52CE5E]/[0.08] px-3 py-2">
-              <p className="text-[12px] leading-snug text-white/85">
+            <div className="rounded-2xl rounded-tl-sm border border-[#52CE5E]/25 bg-[#52CE5E]/[0.08] px-3.5 py-2.5">
+              <p className="text-[14px] leading-snug text-white/85">
                 Hice un diagnóstico rápido y tu equipo requiere revisión técnica. Te derivo con un
                 especialista.
               </p>
@@ -640,8 +640,8 @@ function TechSupportMockup() {
 
           <div className="mt-3.5 flex items-center gap-2.5 px-0.5">
             <span className="h-px flex-1 bg-white/[0.08]" />
-            <span className="anim-handoff inline-flex shrink-0 items-center gap-2 rounded-full border border-dashed border-[#52CE5E]/35 bg-[#52CE5E]/[0.08] px-3.5 py-1.5 text-[12px] font-medium text-white/75">
-              <IconHeadset size={14} stroke={1.8} className="text-[#52CE5E]" />
+            <span className="anim-handoff inline-flex shrink-0 items-center gap-2 rounded-full border border-dashed border-[#52CE5E]/35 bg-[#52CE5E]/[0.08] px-3.5 py-1.5 text-[13px] font-medium text-white/75">
+              <IconHeadset size={15} stroke={1.8} className="text-[#52CE5E]" />
               Derivando a un especialista
             </span>
             <span className="h-px flex-1 bg-white/[0.08]" />
@@ -652,9 +652,9 @@ function TechSupportMockup() {
               DR
               <span className="absolute -right-0.5 -bottom-0.5 h-2 w-2 rounded-full border border-[#0a0a0b] bg-[#52CE5E]" />
             </span>
-            <div className={`max-w-[82%] rounded-2xl rounded-bl-sm border px-3 py-2 ${PANEL_BASE}`}>
-              <p className="text-[9px] font-medium text-[#5B9BFF]/80">Diego R. · Especialista</p>
-              <p className="mt-0.5 text-[12px] leading-snug text-white/80">
+            <div className={`max-w-[82%] rounded-2xl rounded-bl-sm border px-3.5 py-2.5 ${PANEL_BASE}`}>
+              <p className="text-[11px] font-medium text-[#5B9BFF]/80">Diego R. · Especialista</p>
+              <p className="mt-0.5 text-[14px] leading-snug text-white/80">
                 Hola Camila, ya tengo tu caso. Activo la garantía y coordinamos la visita.
               </p>
             </div>
