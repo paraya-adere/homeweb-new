@@ -662,6 +662,7 @@ section.page-section {
 
 .inquiry__cell .inquiry__mock {
   flex: 1;
+  min-height: 320px;
 }
 
 .inquiry__wide .inquiry__mock {
