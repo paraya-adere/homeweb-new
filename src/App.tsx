@@ -384,7 +384,7 @@ export default function App() {
                 checkout. Sin flujos rígidos ni chatbots. Se conectan a tu tienda y tu CRM en
                 tiempo real y operan dentro de Desk.
               </p>
-              <a href="https://adereso.ai/adereso-studio" className="feature__link">
+              <a href="https://adereso.ai/adereso-studio" className="feature__link feature__link--pill">
                 Conocer Studio →
               </a>
             </div>
@@ -410,7 +410,7 @@ export default function App() {
                 Centraliza WhatsApp, Instagram, email y más en un solo sistema. La IA responde
                 primero; si escala, el humano retoma el mismo ticket con todo el historial.
               </p>
-              <a href="https://adereso.ai/adereso-desk" className="feature__link">
+              <a href="https://adereso.ai/adereso-desk" className="feature__link feature__link--pill">
                 Conocer Desk →
               </a>
             </div>
@@ -435,7 +435,7 @@ export default function App() {
                 notifica despachos. 98% de apertura. Si el cliente responde, Studio retoma; si
                 escala, Desk recibe el ticket con historial completo.
               </p>
-              <a href="https://adereso.ai/adereso-engage" className="feature__link">
+              <a href="https://adereso.ai/adereso-engage" className="feature__link feature__link--pill">
                 Conocer Engage →
               </a>
             </div>

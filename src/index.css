@@ -8,7 +8,7 @@
   --text: #ffffff;
   --muted: #a1a1aa;
   --muted-2: #6b6b6b;
-  --accent: #f5e547;
+  --accent: #FFD540;
   --accent-text: #0a0a0a;
   --line: #2e2e2e;
   --radius: 12px;
@@ -442,6 +442,23 @@ section.page-section.stats {
   border-color: rgba(255, 255, 255, 0.62);
 }
 
+.feature__link--pill {
+  padding: 10px 18px;
+  color: #0a0a0a;
+  border-bottom: none;
+  border-radius: var(--radius-pill);
+  background: #ffffff;
+  transition:
+    opacity 0.2s ease,
+    background 0.2s ease;
+}
+
+.feature__link--pill:hover {
+  color: #0a0a0a;
+  border-color: transparent;
+  opacity: 0.9;
+}
+
 .feature__media {
   width: 100%;
   aspect-ratio: 4 / 5;
@@ -548,8 +565,7 @@ section.page-section {
   padding-bottom: var(--section-gap);
 }
 
-.integrations-section,
-.industries {
+.integrations-section {
   padding-top: clamp(56px, 7vw, 96px);
 }
 
@@ -567,6 +583,62 @@ section.page-section {
   background:
     radial-gradient(circle at 20% 10%, rgba(255, 255, 255, 0.022), transparent 40%),
     var(--bg-band-alt);
+}
+
+.inquiry.section-band {
+  position: relative;
+  isolation: isolate;
+  margin-top: 0;
+  border-top: none;
+  border-bottom: none;
+  padding-top: var(--section-gap);
+  padding-bottom: clamp(48px, 6vw, 80px);
+  background:
+    radial-gradient(
+      ellipse 70% 48% at 50% 32%,
+      rgba(180, 205, 255, 0.12) 0%,
+      rgba(0, 74, 216, 0.1) 38%,
+      rgba(0, 74, 216, 0.04) 58%,
+      transparent 76%
+    ),
+    linear-gradient(
+      180deg,
+      var(--bg-page) 0%,
+      #101218 16%,
+      #151A24 40%,
+      #1A2230 55%,
+      #101218 80%,
+      var(--bg-page) 100%
+    );
+}
+
+.industries {
+  margin-top: 0;
+  padding-top: clamp(40px, 5vw, 72px);
+  background: var(--bg-page);
+}
+
+.testimonials.section-band {
+  margin-top: 0;
+  padding-top: var(--section-gap);
+  border-top: none;
+  border-bottom: none;
+  background:
+    radial-gradient(
+      ellipse 72% 48% at 50% 46%,
+      rgba(255, 255, 255, 0.1) 0%,
+      rgba(180, 205, 255, 0.07) 34%,
+      rgba(0, 74, 216, 0.04) 58%,
+      transparent 76%
+    ),
+    linear-gradient(
+      180deg,
+      var(--bg-page) 0%,
+      #101218 18%,
+      #151A24 48%,
+      #101218 82%,
+      var(--bg-page) 100%
+    );
 }
 
 /* —— Inquiry intro —— */
@@ -817,6 +889,27 @@ section.page-section {
     }
     50% {
       box-shadow: 0 0 0 3px rgba(82, 206, 94, 0.18);
+    }
+  }
+
+  /* Handoff badge pulse (tech support) */
+  .anim-handoff {
+    animation: mock-handoff 2.6s ease-in-out infinite;
+  }
+
+  @keyframes mock-handoff {
+    0%,
+    100% {
+      transform: scale(1);
+      border-color: rgba(82, 206, 94, 0.35);
+      box-shadow: 0 0 0 0 rgba(82, 206, 94, 0);
+      color: rgba(255, 255, 255, 0.75);
+    }
+    50% {
+      transform: scale(1.04);
+      border-color: rgba(82, 206, 94, 0.7);
+      box-shadow: 0 0 16px 0 rgba(82, 206, 94, 0.22);
+      color: rgba(255, 255, 255, 0.92);
     }
   }
 }
@@ -1411,6 +1504,10 @@ section.page-section {
   filter: drop-shadow(0 0 4px rgba(120, 150, 225, 0.6));
 }
 
+.integration-orbit__node {
+  pointer-events: none;
+}
+
 .integration-orbit__node-bg {
   fill: #121214;
   stroke: rgba(255, 255, 255, 0.12);
@@ -1424,12 +1521,31 @@ section.page-section {
   transition: opacity 0.25s ease;
 }
 
+.integration-orbit__node.is-hovered .integration-orbit__node-bg,
 .integration-orbit__node:hover .integration-orbit__node-bg {
   stroke: rgba(0, 74, 216, 0.7);
 }
 
+.integration-orbit__node.is-hovered image,
 .integration-orbit__node:hover image {
   opacity: 1;
+}
+
+.integration-orbit__hits {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+}
+
+.integration-orbit__hit {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  border: 0;
+  padding: 0;
+  margin: 0;
+  border-radius: 15px;
+  background: transparent;
+  cursor: pointer;
 }
 
 .integration-orbit__ring {
@@ -3239,6 +3355,10 @@ section.page-section {
     height: clamp(360px, 118vw, 460px);
   }
 
+  .testimonial-card {
+    width: 100%;
+  }
+
   .testimonial-card__metric {
     white-space: normal;
     text-align: left;
@@ -3293,10 +3413,6 @@ section.page-section {
     min-height: 420px;
   }
 
-  .testimonial-card {
-    width: min(92vw, 420px);
-  }
-
   .support__grid {
     grid-template-columns: 1fr;
   }
@@ -3316,10 +3432,10 @@ section.page-section {
     position: sticky;
     top: 0;
     z-index: 20;
-    background: var(--bg);
-    margin: 0 calc(var(--pad) * -1) 16px;
-    padding: 10px var(--pad) 12px;
-    border-bottom: 1px solid var(--line);
+    background: var(--bg-page);
+    margin: 0 calc(var(--pad) * -1) 0;
+    padding: 10px var(--pad) 14px;
+    border-bottom: none;
   }
 
   .industries-nav__track {
@@ -3359,8 +3475,7 @@ section.page-section {
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     margin-inline: calc(var(--pad) * -1);
-    padding-inline: var(--pad);
-    padding-bottom: 4px;
+    padding: 12px var(--pad) 8px;
   }
 
   .industries__grid::-webkit-scrollbar {
@@ -3498,6 +3613,17 @@ section.page-section {
   }
 }
 
+@keyframes hero-spotlight-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -18%) scale(0.88);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1);
+  }
+}
+
 @keyframes hero-copy-in {
   from {
     opacity: 0;
@@ -3538,6 +3664,26 @@ section.page-section {
 .hero-entry__backdrop {
   transform-origin: center top;
   animation: hero-backdrop-in 1.2s cubic-bezier(0.2, 0.75, 0.25, 1) both;
+}
+
+.hero-entry__spotlight {
+  background:
+    radial-gradient(
+      ellipse 52% 48% at 50% 18%,
+      rgba(255, 255, 255, 0.34) 0%,
+      rgba(180, 205, 255, 0.16) 32%,
+      rgba(0, 74, 216, 0.1) 55%,
+      transparent 72%
+    ),
+    radial-gradient(
+      circle at 50% 0%,
+      rgba(255, 255, 255, 0.2) 0%,
+      transparent 58%
+    );
+  filter: blur(28px);
+  transform: translateX(-50%);
+  transform-origin: center top;
+  animation: hero-spotlight-in 1.35s 60ms cubic-bezier(0.2, 0.75, 0.25, 1) both;
 }
 
 .hero-entry__headline,
@@ -3777,6 +3923,7 @@ section.page-section {
   }
 
   .hero-entry__backdrop,
+  .hero-entry__spotlight,
   .hero-entry__headline,
   .hero-entry__description,
   .hero-entry__actions,
@@ -3787,6 +3934,10 @@ section.page-section {
     opacity: 1;
     filter: none;
     transform: none;
+  }
+
+  .hero-entry__spotlight {
+    transform: translateX(-50%);
   }
 
   .tab-underline-progress {

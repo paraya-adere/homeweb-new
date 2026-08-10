@@ -11,7 +11,7 @@ export function FinalCTA() {
     <section
       id="cta"
       className="w-full py-12 md:py-24"
-      style={{ background: '#0b0b0c' }}
+      style={{ background: 'var(--bg-page)' }}
     >
       <div className="mx-auto max-w-[1200px] px-3 md:px-6">
         <div

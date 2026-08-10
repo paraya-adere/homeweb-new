@@ -230,12 +230,9 @@ export function AgentFeatureMockup() {
             <IconClock size={13} stroke={1.6} />
             Operando 24/7
           </span>
-          <button
-            type="button"
-            className="rounded-full bg-white px-4 py-2 text-[11px] font-semibold text-[#18181B]"
-          >
+          <span className="text-[11px] font-medium text-white/55">
             Probar agente
-          </button>
+          </span>
         </div>
       </div>
     </div>
@@ -251,7 +248,6 @@ const HELPDESK_COLUMNS = [
     tickets: [
       ['Fernando Rojas', 'WhatsApp', 'Sí, agrégala a mi carrito', '12m'],
       ['Camila Soto', 'Instagram', '¿Me sirve el cambio mañana?', '18m'],
-      ['Elena Muñoz', 'Email', 'Faltan dos unidades del pedido', '24m'],
     ],
   },
   {
@@ -262,18 +258,6 @@ const HELPDESK_COLUMNS = [
     tickets: [
       ['María Soto', 'WhatsApp', '¿Tienen stock disponible?', '2m'],
       ['Jorge Peña', 'Facebook', 'Necesito cambiar mi pedido', '8m'],
-      ['Diego Silva', 'X', 'Quiero cotizar para mi oficina', '11m'],
-    ],
-  },
-  {
-    title: 'Resueltas',
-    icon: IconCheck,
-    count: 38,
-    accent: '#52CE5E',
-    tickets: [
-      ['Laura Campos', 'WhatsApp', 'Pedido confirmado, gracias', '3m'],
-      ['Andrés Vidal', 'Email', 'El reembolso ya fue recibido', '9m'],
-      ['Paula Reyes', 'TikTok', 'Listo, agendé el despacho', '16m'],
     ],
   },
 ] as const
@@ -361,85 +345,87 @@ export function HelpdeskFeatureMockup() {
           </span>
         </div>
 
-        <div className="grid min-h-0 flex-1 grid-cols-1 gap-2 p-2 lg:grid-cols-3">
-          {HELPDESK_COLUMNS.map((column, columnIndex) => {
-            const ColumnIcon = column.icon
-            return (
-              <div
-                key={column.title}
-                className={`min-w-0 flex-col overflow-hidden rounded-lg border border-white/[0.07] bg-[#0F1011] ${
-                  columnIndex === 0 ? 'flex' : 'hidden lg:flex'
-                }`}
-              >
-                <div className="flex h-11 shrink-0 items-center gap-2 border-b border-white/[0.07] bg-[#161718] px-2.5">
-                  <ColumnIcon size={13} stroke={1.6} style={{ color: column.accent }} />
-                  <p className="min-w-0 flex-1 truncate text-[11px] font-semibold text-white/65">
-                    {column.title}
-                  </p>
-                  <span className="rounded-full bg-white/[0.055] px-1.5 py-0.5 text-[9px] text-white/35">
-                    {column.count}
-                  </span>
-                  <IconDotsVertical size={12} stroke={1.5} className="text-white/20" />
-                </div>
+        <div className="relative min-h-0 flex-1 overflow-hidden">
+          <div className="absolute inset-0 origin-top-left scale-[1.12] p-2.5 sm:scale-[1.18]">
+            <div className="grid h-full min-h-0 grid-cols-2 gap-2.5">
+              {HELPDESK_COLUMNS.map((column) => {
+                const ColumnIcon = column.icon
+                return (
+                  <div
+                    key={column.title}
+                    className="flex min-w-0 flex-col overflow-hidden rounded-lg border border-white/[0.07] bg-[#0F1011]"
+                  >
+                    <div className="flex h-12 shrink-0 items-center gap-2 border-b border-white/[0.07] bg-[#161718] px-3">
+                      <ColumnIcon size={14} stroke={1.6} style={{ color: column.accent }} />
+                      <p className="min-w-0 flex-1 truncate text-[12px] font-semibold text-white/70">
+                        {column.title}
+                      </p>
+                      <span className="rounded-full bg-white/[0.055] px-1.5 py-0.5 text-[10px] text-white/35">
+                        {column.count}
+                      </span>
+                      <IconDotsVertical size={13} stroke={1.5} className="text-white/20" />
+                    </div>
 
-                <div className="min-h-0 flex-1 space-y-1.5 overflow-hidden p-1.5">
-                  {column.tickets.map(([name, channel, message, time], index) => {
-                    const ChannelIcon =
-                      HELPDESK_CHANNEL_ICONS[
-                        channel as keyof typeof HELPDESK_CHANNEL_ICONS
-                      ]
-                    return (
-                      <div
-                        key={name}
-                        className={`rounded-lg border p-2.5 ${
-                          index === 0
-                            ? 'border-[#6674FF]/25 bg-white/[0.045]'
-                            : 'border-white/[0.065] bg-[#131415]'
-                        }`}
-                      >
-                        <div className="flex items-center gap-2">
-                          <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-white/[0.08] bg-white/[0.07] text-white/75">
-                            <ChannelIcon size={14} stroke={1.7} />
-                          </span>
-                          <div className="min-w-0">
-                            <p className="truncate text-[11px] font-semibold text-white/68">
-                              {name}
+                    <div className="min-h-0 flex-1 space-y-2 overflow-hidden p-2">
+                      {column.tickets.map(([name, channel, message, time], index) => {
+                        const ChannelIcon =
+                          HELPDESK_CHANNEL_ICONS[
+                            channel as keyof typeof HELPDESK_CHANNEL_ICONS
+                          ]
+                        return (
+                          <div
+                            key={name}
+                            className={`rounded-xl border p-3 ${
+                              index === 0
+                                ? 'border-[#6674FF]/25 bg-white/[0.045]'
+                                : 'border-white/[0.065] bg-[#131415]'
+                            }`}
+                          >
+                            <div className="flex items-center gap-2.5">
+                              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white/[0.08] bg-white/[0.07] text-white/75">
+                                <ChannelIcon size={15} stroke={1.7} />
+                              </span>
+                              <div className="min-w-0">
+                                <p className="truncate text-[12px] font-semibold text-white/72">
+                                  {name}
+                                </p>
+                                <p className="text-[10px] text-white/35">{channel}</p>
+                              </div>
+                              <span className="ml-auto shrink-0 text-[9px] text-white/25">
+                                {time}
+                              </span>
+                            </div>
+                            <p className="mt-2.5 line-clamp-2 text-[11px] leading-[1.45] text-white/45">
+                              {message}
                             </p>
-                            <p className="text-[9px] text-white/35">{channel}</p>
+                            <div className="mt-2.5 flex items-center justify-between">
+                              <span className="inline-flex items-center gap-1.5 text-[9px] text-white/25">
+                                <span
+                                  className="h-1.5 w-1.5 rounded-full"
+                                  style={{ backgroundColor: column.accent }}
+                                />
+                                #{7100 + index + column.count}
+                              </span>
+                              <span className="flex items-center gap-1">
+                                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#5B7C99] text-[7px] font-semibold text-white/75">
+                                  PL
+                                </span>
+                                <IconDotsVertical
+                                  size={11}
+                                  stroke={1.5}
+                                  className="text-white/18"
+                                />
+                              </span>
+                            </div>
                           </div>
-                          <span className="ml-auto shrink-0 text-[8px] text-white/25">
-                            {time}
-                          </span>
-                        </div>
-                        <p className="mt-2 line-clamp-2 text-[10px] leading-[1.4] text-white/42">
-                          {message}
-                        </p>
-                        <div className="mt-2 flex items-center justify-between">
-                          <span className="inline-flex items-center gap-1 text-[8px] text-white/22">
-                            <span
-                              className="h-1.5 w-1.5 rounded-full"
-                              style={{ backgroundColor: column.accent }}
-                            />
-                            #{7100 + index + column.count}
-                          </span>
-                          <span className="flex items-center gap-1">
-                            <span className="flex h-4 w-4 items-center justify-center rounded-full bg-[#5B7C99] text-[6px] font-semibold text-white/75">
-                              PL
-                            </span>
-                            <IconDotsVertical
-                              size={10}
-                              stroke={1.5}
-                              className="text-white/18"
-                            />
-                          </span>
-                        </div>
-                      </div>
-                    )
-                  })}
-                </div>
-              </div>
-            )
-          })}
+                        )
+                      })}
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -459,7 +445,7 @@ export function EngageFeatureMockup() {
         </div>
         <button
           type="button"
-          className="ml-auto rounded-md bg-[#E4E4E7] px-3 py-1.5 text-[9px] font-semibold text-[#18181B]"
+          className="ml-auto text-[9px] font-medium text-white/55"
         >
           Crear campaña +
         </button>

@@ -165,7 +165,7 @@ export function FAQ() {
   return (
     <section
       className="w-full py-10 md:py-20"
-      style={{ background: '#0b0b0c' }}
+      style={{ background: 'var(--bg-page)' }}
     >
       <div className="max-w-[1200px] mx-auto px-3 md:px-6">
         <div

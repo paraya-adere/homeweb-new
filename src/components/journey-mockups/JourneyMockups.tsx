@@ -13,6 +13,8 @@ import {
   IconPlus,
   IconShoppingCart,
   IconSparkles,
+  IconStar,
+  IconStarFilled,
   IconTag,
 } from '@tabler/icons-react'
 
@@ -636,10 +638,10 @@ function TechSupportMockup() {
             </div>
           </div>
 
-          <div className="mt-3 flex items-center gap-2.5 px-1">
+          <div className="mt-3.5 flex items-center gap-2.5 px-0.5">
             <span className="h-px flex-1 bg-white/[0.08]" />
-            <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-dashed border-white/15 bg-white/[0.03] px-2.5 py-1 text-[10px] font-medium text-white/55">
-              <IconHeadset size={12} stroke={1.8} className="text-[#52CE5E]/80" />
+            <span className="anim-handoff inline-flex shrink-0 items-center gap-2 rounded-full border border-dashed border-[#52CE5E]/35 bg-[#52CE5E]/[0.08] px-3.5 py-1.5 text-[12px] font-medium text-white/75">
+              <IconHeadset size={14} stroke={1.8} className="text-[#52CE5E]" />
               Derivando a un especialista
             </span>
             <span className="h-px flex-1 bg-white/[0.08]" />
@@ -708,7 +710,6 @@ const HELPDESK_TICKETS = [
     name: 'Camila M.',
     message: '¿Pueden ayudarme con el cambio de mi pedido?',
     time: '2m',
-    status: 'IA respondiendo',
     icon: IconBrandWhatsapp,
     accent: '#52CE5E',
     active: true,
@@ -717,7 +718,6 @@ const HELPDESK_TICKETS = [
     name: 'Rodrigo P.',
     message: 'El producto llegó dañado, ¿cómo lo cambio?',
     time: '8m',
-    status: 'En espera',
     icon: IconBrandInstagram,
     accent: '#E1306C',
     active: false,
@@ -726,27 +726,52 @@ const HELPDESK_TICKETS = [
     name: 'Valentina S.',
     message: 'Necesito el estado de mi reembolso #1042',
     time: '14m',
-    status: 'Asignado',
     icon: IconMail,
     accent: '#5B9BFF',
     active: false,
   },
 ] as const
 
+// Loop: 0 vacío → 1..3 tickets → hold → reset
+const HELPDESK_STEP_MS = [450, 1000, 1000, 2200]
+
 function HelpdeskJourneyMockup() {
+  const [visibleCount, setVisibleCount] = useState(0)
+
+  useEffect(() => {
+    const delay =
+      visibleCount >= HELPDESK_TICKETS.length
+        ? HELPDESK_STEP_MS[HELPDESK_STEP_MS.length - 1]
+        : HELPDESK_STEP_MS[visibleCount]
+
+    const t = setTimeout(() => {
+      setVisibleCount((count) =>
+        count >= HELPDESK_TICKETS.length ? 0 : count + 1,
+      )
+    }, delay)
+
+    return () => clearTimeout(t)
+  }, [visibleCount])
+
   return (
     <Card monochrome hideHeader>
       <MockShell>
         <MockHeader label="Bandeja unificada" chip="Omnicanal" />
-        <div className="mt-3 flex min-h-0 flex-1 flex-col justify-between gap-2.5">
-          {HELPDESK_TICKETS.map((ticket) => {
+        <div className="mt-3 flex min-h-0 flex-1 flex-col justify-center gap-1.5">
+          {HELPDESK_TICKETS.map((ticket, index) => {
             const ChannelIcon = ticket.icon
+            const visible = index < visibleCount
             return (
               <div
                 key={ticket.name}
-                className={`rounded-xl border px-3 py-2.5 ${
+                className={`rounded-xl border px-3 py-2.5 transition-[opacity,transform] duration-500 ease-out ${
                   ticket.active ? PANEL_TOP : PANEL_BASE
-                } ${PANEL_SHADOW}`}
+                } ${PANEL_SHADOW} ${
+                  visible
+                    ? 'translate-y-0 opacity-100'
+                    : 'pointer-events-none translate-y-1.5 opacity-0'
+                }`}
+                aria-hidden={!visible}
               >
                 <div className="flex items-center gap-2.5">
                   <span
@@ -761,18 +786,105 @@ function HelpdeskJourneyMockup() {
                   </div>
                   <span className="shrink-0 text-[10px] text-white/30">{ticket.time}</span>
                 </div>
-                <div className="mt-2.5 flex items-center justify-between gap-2">
-                  <span
-                    className="inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-medium"
-                    style={{
-                      borderColor: `${ticket.accent}33`,
-                      backgroundColor: `${ticket.accent}14`,
-                      color: ticket.accent,
-                    }}
+              </div>
+            )
+          })}
+        </div>
+      </MockShell>
+    </Card>
+  )
+}
+
+const RETURN_MESSAGES = [
+  {
+    side: 'ai' as const,
+    text: '¿Qué ocurrió con tu pedido?',
+  },
+  {
+    side: 'user' as const,
+    text: 'Me llegó el producto incorrecto',
+  },
+  {
+    side: 'ai' as const,
+    text: 'Ok. Dime el número de orden para gestionar el reembolso o el cambio.',
+  },
+  {
+    side: 'user' as const,
+    text: '#ORD-48291',
+  },
+  {
+    side: 'ai' as const,
+    text: 'Ok, gestionando tu devolución…',
+  },
+  {
+    side: 'ai' as const,
+    text: 'Devolución resuelta. Tu reembolso ya está en camino.',
+  },
+] as const
+
+// Loop: 0 vacío → 1..6 mensajes → hold → reset
+const RETURN_STEP_MS = [350, 950, 950, 1100, 950, 1100, 2200]
+
+function ReturnMockup() {
+  const [visibleCount, setVisibleCount] = useState(0)
+
+  useEffect(() => {
+    const delay =
+      visibleCount >= RETURN_MESSAGES.length
+        ? RETURN_STEP_MS[RETURN_STEP_MS.length - 1]
+        : RETURN_STEP_MS[visibleCount]
+
+    const t = setTimeout(() => {
+      setVisibleCount((count) =>
+        count >= RETURN_MESSAGES.length ? 0 : count + 1,
+      )
+    }, delay)
+
+    return () => clearTimeout(t)
+  }, [visibleCount])
+
+  return (
+    <Card monochrome hideHeader>
+      <MockShell>
+        <div className="flex h-full min-h-0 flex-col justify-center gap-1.5 overflow-hidden">
+          {RETURN_MESSAGES.map((message, index) => {
+            const visible = index < visibleCount
+            const rowClass = `flex shrink-0 items-end gap-2 transition-[opacity,transform] duration-500 ease-out ${
+              visible
+                ? 'translate-y-0 opacity-100'
+                : 'pointer-events-none translate-y-1.5 opacity-0'
+            }`
+
+            if (message.side === 'user') {
+              return (
+                <div
+                  key={`${message.text}-${index}`}
+                  className={`${rowClass} justify-end`}
+                  aria-hidden={!visible}
+                >
+                  <div
+                    className={`max-w-[82%] rounded-2xl rounded-br-sm border px-3 py-1.5 ${PANEL_TOP}`}
                   >
-                    {ticket.status}
+                    <p className="text-[11px] leading-snug text-white/85">{message.text}</p>
+                  </div>
+                  <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-white/[0.08] text-[8px] font-semibold text-white/55">
+                    CM
                   </span>
-                  <span className="text-[10px] text-white/30">#{7100 + ticket.time.length}</span>
+                </div>
+              )
+            }
+
+            return (
+              <div
+                key={`${message.text}-${index}`}
+                className={rowClass}
+                aria-hidden={!visible}
+              >
+                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#52CE5E]/15 text-[#52CE5E]">
+                  <IconSparkles size={11} stroke={1.7} />
+                </span>
+                <div className="max-w-[88%] rounded-2xl rounded-bl-sm border border-[#52CE5E]/25 bg-[#52CE5E]/[0.1] px-3 py-1.5">
+                  <p className="text-[11px] leading-snug text-white/85">{message.text}</p>
                 </div>
               </div>
             )
@@ -783,50 +895,22 @@ function HelpdeskJourneyMockup() {
   )
 }
 
-function ReturnMockup() {
-  return (
-    <Card monochrome hideHeader>
-      <MockShell>
-        <div className="flex h-full min-h-0 flex-1 flex-col">
-          <p className="text-[12px] text-white/40">¿Qué ocurrió con tu pedido?</p>
-
-          <div className="mt-3 space-y-2">
-            {['Producto incorrecto', 'Producto dañado', 'Ya no lo necesito'].map((reason, index) => (
-              <div
-                key={reason}
-                className={`flex w-full items-center rounded-lg border px-3 py-2.5 text-[13px] ${
-                  index === 0
-                    ? 'border-white/15 bg-white/[0.05] text-white/75'
-                    : 'border-white/[0.07] bg-[#171719] text-white/40'
-                }`}
-              >
-                {reason}
-                {index === 0 && (
-                  <IconCheck size={14} stroke={2} className="ml-auto text-white/70" />
-                )}
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-auto space-y-2">
-            <div className="rounded-lg border border-white/[0.07] bg-white/[0.025] px-3 py-2.5">
-              <p className="text-[11px] text-white/30">Resolución</p>
-              <p className="mt-0.5 text-[13px] font-medium text-white/70">Reembolso al medio de pago</p>
-            </div>
-            <div className="flex items-center gap-2 rounded-lg border border-white/[0.07] bg-white/[0.025] px-3 py-2.5">
-              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#52CE5E]/10 text-[#52CE5E]/75">
-                <IconCheck size={12} stroke={2} />
-              </span>
-              <p className="text-[12px] font-medium text-white/60">Devolución disponible</p>
-            </div>
-          </div>
-        </div>
-      </MockShell>
-    </Card>
-  )
-}
+// Loop: 0 idle (5 empty) → 1..5 fill stars → hold → reset
+const SURVEY_STEP_MS = [1400, 320, 320, 320, 320, 320, 2200]
 
 function SurveyMockup() {
+  const [phase, setPhase] = useState(0)
+
+  useEffect(() => {
+    const t = setTimeout(
+      () => setPhase((p) => (p + 1) % SURVEY_STEP_MS.length),
+      SURVEY_STEP_MS[phase],
+    )
+    return () => clearTimeout(t)
+  }, [phase])
+
+  const filledStars = Math.max(0, Math.min(5, phase))
+
   return (
     <Card monochrome hideHeader>
       <MockShell>
@@ -844,15 +928,29 @@ function SurveyMockup() {
                 />
               </div>
               <p className="mt-2.5 px-1 text-[12px] leading-snug text-white/85">
-                Nos gustaría saber tu opinión. ¿Quieres calificar tu compra?
+                Nos gustaría saber tu opinión. ¿Qué te pareció tu compra?
               </p>
-              <div className="mt-2 flex border-t border-white/10">
-                <p className="flex-1 border-r border-white/10 py-1.5 text-center text-[12.5px] font-medium text-[#52CE5E]">
-                  Sí
-                </p>
-                <p className="flex-1 py-1.5 text-center text-[12.5px] font-medium text-white/55">
-                  No
-                </p>
+              <div className="mt-2.5 flex items-center justify-center gap-1.5 border-t border-white/10 pt-2.5">
+                {Array.from({ length: 5 }, (_, index) => {
+                  const filled = index < filledStars
+                  const StarIcon = filled ? IconStarFilled : IconStar
+                  return (
+                    <span
+                      key={index}
+                      className={`transition-transform duration-300 ${
+                        filled ? 'scale-110 text-[#FFD540]' : 'scale-100 text-white/25'
+                      }`}
+                    >
+                      <StarIcon
+                        size={18}
+                        stroke={1.7}
+                        className={
+                          filled && index === filledStars - 1 ? 'anim-pulse' : undefined
+                        }
+                      />
+                    </span>
+                  )
+                })}
               </div>
             </div>
           </div>
