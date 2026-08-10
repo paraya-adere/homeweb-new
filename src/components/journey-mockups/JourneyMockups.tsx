@@ -865,7 +865,7 @@ function ReturnMockup() {
                   <div
                     className={`max-w-[82%] rounded-2xl rounded-br-sm border px-3 py-1.5 ${PANEL_TOP}`}
                   >
-                    <p className="text-[11px] leading-snug text-white/85">{message.text}</p>
+                    <p className="text-[13px] leading-snug text-white/85">{message.text}</p>
                   </div>
                   <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-white/[0.08] text-[8px] font-semibold text-white/55">
                     CM
@@ -884,7 +884,7 @@ function ReturnMockup() {
                   <IconSparkles size={11} stroke={1.7} />
                 </span>
                 <div className="max-w-[88%] rounded-2xl rounded-bl-sm border border-[#52CE5E]/25 bg-[#52CE5E]/[0.1] px-3 py-1.5">
-                  <p className="text-[11px] leading-snug text-white/85">{message.text}</p>
+                  <p className="text-[13px] leading-snug text-white/85">{message.text}</p>
                 </div>
               </div>
             )

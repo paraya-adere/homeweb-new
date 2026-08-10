@@ -20,7 +20,6 @@ import {
   IconDotsVertical,
   IconFileText,
   IconHistory,
-  IconInbox,
   IconLayoutSidebarLeftCollapse,
   IconMail,
   IconMessageQuestion,
@@ -273,158 +272,147 @@ const HELPDESK_CHANNEL_ICONS = {
 
 export function HelpdeskFeatureMockup() {
   return (
-    <div className="flex h-full min-h-[420px] overflow-hidden rounded-tr-2xl rounded-bl-2xl border-t border-r border-white/[0.09] bg-[#0C0C0D] shadow-[0_22px_55px_rgba(0,0,0,0.38)]">
-      <aside className="hidden w-11 shrink-0 flex-col items-center border-r border-white/[0.07] bg-[#0E0F10] py-2.5 lg:flex">
-        {[IconPlus, IconPuzzle, IconSearch, IconSettings].map((Icon, index) => (
-          <span
-            key={index}
-            className={`mb-1 flex h-8 w-8 items-center justify-center rounded-lg ${
-              index === 1 ? 'bg-white/[0.055] text-white/65' : 'text-white/28'
-            }`}
-          >
-            <Icon size={14} stroke={1.5} />
-          </span>
-        ))}
-        <img
-          src="adereso-isotipo.png"
-          alt=""
-          className="mt-auto h-7 w-7 rounded-full object-cover"
-        />
-      </aside>
-
-      <div className="flex min-w-0 flex-1 flex-col">
-        <header className="flex h-12 shrink-0 items-center gap-3 border-b border-white/[0.07] bg-[#111213] px-3">
-          <img src="adereso-isotipo.png" alt="" className="h-6 w-6 rounded-full object-cover" />
-          <span className="text-[12px] font-semibold text-white/78">Adereso</span>
-          <nav className="ml-2 flex min-w-0 items-center gap-1">
-            <span className="inline-flex items-center gap-1.5 rounded-md bg-white/[0.045] px-2.5 py-1.5 text-[10px] font-medium text-white/70">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#6775FF]" />
-              <IconInbox size={11} stroke={1.6} />
-              Bandeja de entrada
-            </span>
-            <span className="hidden items-center gap-1 px-2 py-1.5 text-[10px] text-white/30 md:inline-flex">
-              Analítica
-              <IconChevronDown size={10} stroke={1.5} />
-            </span>
-            <span className="hidden px-2 py-1.5 text-[10px] text-white/30 md:inline-flex">
-              Módulos
-            </span>
-            <span className="hidden px-2 py-1.5 text-[10px] text-white/30 lg:inline-flex">
-              Administrador
-            </span>
-          </nav>
-          <div className="ml-auto flex items-center gap-2">
-            <span className="relative text-white/30">
-              <IconBell size={14} stroke={1.5} />
-              <span className="absolute -top-0.5 -right-0.5 h-1.5 w-1.5 rounded-full bg-[#F87171]" />
-            </span>
-            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#5B7C99] text-[8px] font-semibold text-white">
-              PL
-            </span>
-            <span className="hidden text-[10px] text-white/55 xl:inline">Pedro L.</span>
-          </div>
-        </header>
-
-        <div className="flex h-10 shrink-0 items-center gap-2 border-b border-white/[0.07] bg-[#0F1011] px-3">
-          {['Todas', 'WhatsApp', 'Instagram', 'Email'].map((channel, index) => (
+    <div className="relative h-full min-h-[420px] overflow-hidden rounded-tr-2xl rounded-bl-2xl border-t border-r border-white/[0.09] bg-[#0C0C0D] shadow-[0_22px_55px_rgba(0,0,0,0.38)]">
+      <div className="helpdesk-feature-zoom absolute left-0 top-0 flex">
+        <aside className="flex w-11 shrink-0 flex-col items-center border-r border-white/[0.07] bg-[#0E0F10] py-2.5">
+          {[IconPlus, IconPuzzle, IconSearch, IconSettings].map((Icon, index) => (
             <span
-              key={channel}
-              className={`rounded-full px-2.5 py-1 text-[9px] font-medium ${
-                index > 1 ? 'hidden sm:inline-flex' : ''
-              } ${
-                index === 0
-                  ? 'border border-white/[0.08] bg-white/[0.055] text-white/65'
-                  : 'text-white/28'
+              key={index}
+              className={`mb-1 flex h-8 w-8 items-center justify-center rounded-lg ${
+                index === 1 ? 'bg-white/[0.055] text-white/65' : 'text-white/28'
               }`}
             >
-              {channel}
+              <Icon size={14} stroke={1.5} />
             </span>
           ))}
-          <span className="ml-auto hidden text-[9px] text-white/25 sm:inline">
-            Orden: más urgente
-          </span>
-        </div>
+          <img
+            src="adereso-isotipo.png"
+            alt=""
+            className="mt-auto h-7 w-7 rounded-full object-cover"
+          />
+        </aside>
 
-        <div className="relative min-h-0 flex-1 overflow-hidden">
-          <div className="absolute inset-0 origin-top-left scale-[1.12] p-2.5 sm:scale-[1.18]">
-            <div className="grid h-full min-h-0 grid-cols-2 gap-2.5">
-              {HELPDESK_COLUMNS.map((column) => {
-                const ColumnIcon = column.icon
-                return (
-                  <div
-                    key={column.title}
-                    className="flex min-w-0 flex-col overflow-hidden rounded-lg border border-white/[0.07] bg-[#0F1011]"
-                  >
-                    <div className="flex h-12 shrink-0 items-center gap-2 border-b border-white/[0.07] bg-[#161718] px-3">
-                      <ColumnIcon size={14} stroke={1.6} style={{ color: column.accent }} />
-                      <p className="min-w-0 flex-1 truncate text-[12px] font-semibold text-white/70">
-                        {column.title}
-                      </p>
-                      <span className="rounded-full bg-white/[0.055] px-1.5 py-0.5 text-[10px] text-white/35">
-                        {column.count}
-                      </span>
-                      <IconDotsVertical size={13} stroke={1.5} className="text-white/20" />
-                    </div>
-
-                    <div className="min-h-0 flex-1 space-y-2 overflow-hidden p-2">
-                      {column.tickets.map(([name, channel, message, time], index) => {
-                        const ChannelIcon =
-                          HELPDESK_CHANNEL_ICONS[
-                            channel as keyof typeof HELPDESK_CHANNEL_ICONS
-                          ]
-                        return (
-                          <div
-                            key={name}
-                            className={`rounded-xl border p-3 ${
-                              index === 0
-                                ? 'border-[#6674FF]/25 bg-white/[0.045]'
-                                : 'border-white/[0.065] bg-[#131415]'
-                            }`}
-                          >
-                            <div className="flex items-center gap-2.5">
-                              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white/[0.08] bg-white/[0.07] text-white/75">
-                                <ChannelIcon size={15} stroke={1.7} />
-                              </span>
-                              <div className="min-w-0">
-                                <p className="truncate text-[12px] font-semibold text-white/72">
-                                  {name}
-                                </p>
-                                <p className="text-[10px] text-white/35">{channel}</p>
-                              </div>
-                              <span className="ml-auto shrink-0 text-[9px] text-white/25">
-                                {time}
-                              </span>
-                            </div>
-                            <p className="mt-2.5 line-clamp-2 text-[11px] leading-[1.45] text-white/45">
-                              {message}
-                            </p>
-                            <div className="mt-2.5 flex items-center justify-between">
-                              <span className="inline-flex items-center gap-1.5 text-[9px] text-white/25">
-                                <span
-                                  className="h-1.5 w-1.5 rounded-full"
-                                  style={{ backgroundColor: column.accent }}
-                                />
-                                #{7100 + index + column.count}
-                              </span>
-                              <span className="flex items-center gap-1">
-                                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#5B7C99] text-[7px] font-semibold text-white/75">
-                                  PL
-                                </span>
-                                <IconDotsVertical
-                                  size={11}
-                                  stroke={1.5}
-                                  className="text-white/18"
-                                />
-                              </span>
-                            </div>
-                          </div>
-                        )
-                      })}
-                    </div>
-                  </div>
-                )
-              })}
+        <div className="flex min-w-0 flex-1 flex-col">
+          <header className="flex h-12 shrink-0 items-center gap-2.5 border-b border-white/[0.07] bg-[#111213] px-3">
+            <img src="adereso-isotipo.png" alt="" className="h-6 w-6 shrink-0 rounded-full object-cover" />
+            <span className="shrink-0 text-[12px] font-semibold text-white/78">Adereso</span>
+            <nav className="ml-1 flex min-w-0 items-center gap-0.5 overflow-hidden">
+              <span className="inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-md bg-white/[0.06] px-2 py-1 text-[10px] font-medium text-white/75">
+                <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[#6775FF]" />
+                Bandeja de entrada
+              </span>
+              <span className="inline-flex shrink-0 items-center gap-1 whitespace-nowrap px-2 py-1 text-[10px] text-white/30">
+                Analítica
+                <IconChevronDown size={10} stroke={1.5} />
+              </span>
+              <span className="shrink-0 whitespace-nowrap px-2 py-1 text-[10px] text-white/30">
+                Módulos
+              </span>
+            </nav>
+            <div className="ml-auto flex shrink-0 items-center gap-2">
+              <span className="relative text-white/30">
+                <IconBell size={14} stroke={1.5} />
+                <span className="absolute -top-0.5 -right-0.5 h-1.5 w-1.5 rounded-full bg-[#F87171]" />
+              </span>
+              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#5B7C99] text-[8px] font-semibold text-white">
+                PL
+              </span>
             </div>
+          </header>
+
+          <div className="flex h-10 shrink-0 items-center gap-2 border-b border-white/[0.07] bg-[#0F1011] px-3">
+            {['Todas', 'WhatsApp', 'Instagram', 'Email'].map((channel, index) => (
+              <span
+                key={channel}
+                className={`rounded-full px-2.5 py-1 text-[9px] font-medium ${
+                  index === 0
+                    ? 'border border-white/[0.08] bg-white/[0.055] text-white/65'
+                    : 'text-white/28'
+                }`}
+              >
+                {channel}
+              </span>
+            ))}
+            <span className="ml-auto text-[9px] text-white/25">Orden: más urgente</span>
+          </div>
+
+          <div className="grid min-h-0 flex-1 grid-cols-2 gap-2.5 overflow-hidden p-2.5">
+            {HELPDESK_COLUMNS.map((column) => {
+              const ColumnIcon = column.icon
+              return (
+                <div
+                  key={column.title}
+                  className="flex min-w-0 flex-col overflow-hidden rounded-lg border border-white/[0.07] bg-[#0F1011]"
+                >
+                  <div className="flex h-12 shrink-0 items-center gap-2 border-b border-white/[0.07] bg-[#161718] px-3">
+                    <ColumnIcon size={14} stroke={1.6} style={{ color: column.accent }} />
+                    <p className="min-w-0 flex-1 truncate text-[12px] font-semibold text-white/70">
+                      {column.title}
+                    </p>
+                    <span className="rounded-full bg-white/[0.055] px-1.5 py-0.5 text-[10px] text-white/35">
+                      {column.count}
+                    </span>
+                    <IconDotsVertical size={13} stroke={1.5} className="text-white/20" />
+                  </div>
+
+                  <div className="min-h-0 flex-1 space-y-2 overflow-hidden p-2">
+                    {column.tickets.map(([name, channel, message, time], index) => {
+                      const ChannelIcon =
+                        HELPDESK_CHANNEL_ICONS[
+                          channel as keyof typeof HELPDESK_CHANNEL_ICONS
+                        ]
+                      return (
+                        <div
+                          key={name}
+                          className={`rounded-xl border p-3 ${
+                            index === 0
+                              ? 'border-[#6674FF]/25 bg-white/[0.045]'
+                              : 'border-white/[0.065] bg-[#131415]'
+                          }`}
+                        >
+                          <div className="flex items-center gap-2.5">
+                            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white/[0.08] bg-white/[0.07] text-white/75">
+                              <ChannelIcon size={15} stroke={1.7} />
+                            </span>
+                            <div className="min-w-0">
+                              <p className="truncate text-[12px] font-semibold text-white/72">
+                                {name}
+                              </p>
+                              <p className="text-[10px] text-white/35">{channel}</p>
+                            </div>
+                            <span className="ml-auto shrink-0 text-[9px] text-white/25">
+                              {time}
+                            </span>
+                          </div>
+                          <p className="mt-2.5 line-clamp-2 text-[11px] leading-[1.45] text-white/45">
+                            {message}
+                          </p>
+                          <div className="mt-2.5 flex items-center justify-between">
+                            <span className="inline-flex items-center gap-1.5 text-[9px] text-white/25">
+                              <span
+                                className="h-1.5 w-1.5 rounded-full"
+                                style={{ backgroundColor: column.accent }}
+                              />
+                              #{7100 + index + column.count}
+                            </span>
+                            <span className="flex items-center gap-1">
+                              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#5B7C99] text-[7px] font-semibold text-white/75">
+                                PL
+                              </span>
+                              <IconDotsVertical
+                                size={11}
+                                stroke={1.5}
+                                className="text-white/18"
+                              />
+                            </span>
+                          </div>
+                        </div>
+                      )
+                    })}
+                  </div>
+                </div>
+              )
+            })}
           </div>
         </div>
       </div>

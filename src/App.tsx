@@ -738,18 +738,20 @@ export default function App() {
 
       <FinalCTA />
 
-      <FAQ />
+      <div className="page-end">
+        <FAQ />
 
-      <footer className="footer">
-        <div className="container">
-          <div className="footer__links">
-            <a href="#">Privacidad</a>
-            <a href="#">Términos</a>
-            <a href="#">Contacto</a>
-            <a href="#">© Adereso</a>
+        <footer className="footer">
+          <div className="container">
+            <div className="footer__links">
+              <a href="#">Privacidad</a>
+              <a href="#">Términos</a>
+              <a href="#">Contacto</a>
+              <a href="#">© Adereso</a>
+            </div>
           </div>
-        </div>
-      </footer>
+        </footer>
+      </div>
     </main>
   )
 }

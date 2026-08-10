@@ -163,10 +163,7 @@ export function FAQ() {
   const enterTransition = 'opacity 0.7s cubic-bezier(0.2,0.8,0.2,1), transform 0.7s cubic-bezier(0.2,0.8,0.2,1)'
 
   return (
-    <section
-      className="w-full py-10 md:py-20"
-      style={{ background: 'var(--bg-page)' }}
-    >
+    <section className="page-end__faq w-full py-10 md:py-20">
       <div className="max-w-[1200px] mx-auto px-3 md:px-6">
         <div
           ref={headerRef}
