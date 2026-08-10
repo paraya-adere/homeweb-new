@@ -25,7 +25,7 @@ const NODE_SIZE = 56
 const LEFT_ITEMS: OrbitItem[] = [
   {
     name: 'Shopify',
-    image: 'shopify.svg',
+    image: 'integrations/shopify.svg',
     description: 'Sincroniza catálogo, stock y pedidos con tu tienda.',
   },
   {
