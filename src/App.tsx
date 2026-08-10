@@ -141,68 +141,58 @@ function ClientLogoCard({
 
 const TESTIMONIALS = [
   {
-    company: 'Cencosud',
-    body: 'Es mucho más fácil para el ejecutivo tener centralizadas las interacciones en un mismo aplicativo. El cliente valora mucho una buena atención.',
-    author: 'Kevin Rojas',
-    role: 'Supervisor de Redes Sociales',
-    metric: '75% reducción en tiempos de respuesta',
-    avatar:
-      'https://adereso.ai/wp-content/uploads/2025/04/kevin-rojas-cencosud-adereso-caso-exito.webp',
-    logo: 'clientes/cencosud.svg',
-    href: 'https://adereso.ai/casos-de-exitos/cencosud',
-  },
-  {
-    company: 'Walmart Chile',
-    body: 'Es muy sencillo gestionar un ticket, y la disposición de Adereso a trabajar en nuevos desarrollos que nos permitan ser más eficientes es una virtud del equipo.',
-    author: 'Odette Viveros',
-    role: 'Project Manager, Customer Care',
-    metric: '500K tickets mensuales',
-    avatar: 'https://adereso.ai/wp-content/uploads/2025/04/odette-viveros.webp',
-    logo: 'clientes/walmart.svg',
-    href: 'https://adereso.ai/casos-de-exitos/walmart',
-  },
-  {
     company: 'Sodimac',
-    body: 'Es un equipo flexible y profesional, dispuesto a apoyar en cada proyecto. La plataforma es simple para los ejecutivos que atienden a nuestros clientes. Totalmente recomendado.',
-    author: 'Cristian Obregón',
-    role: 'Jefe de mejora continua y calidad en experiencia cliente',
-    metric: '+50% ventas asistidas por WhatsApp',
-    avatar: 'https://cms.adereso.ai/wp-content/uploads/2024/02/sodimac-cde-1024x572.webp',
+    body: 'Un equipo de profesionales dispuesto a apoyarte en todo momento. Se han ido adaptando a nuestras necesidades a medida que el negocio se mueve, y es una plataforma muy simple de usar para los ejecutivos que atienden a nuestros clientes. Totalmente recomendado.',
+    author: 'Cristián Obregón',
+    role: 'Jefe de mejora continua y calidad',
+    metric: '+50% ventas por WhatsApp en un año',
+    avatar: 'testimonials/cristian-obregon.png',
     logo: 'clientes/Sodimac.svg',
     href: 'https://adereso.ai/casos-de-exitos/sodimac',
   },
   {
-    company: 'Falabella.com',
-    body: 'La unificación de la atención al cliente de sus diversas unidades de negocio y canales potenció la eficiencia y el control en Falabella.',
-    author: 'Equipo de Experiencia de Cliente',
-    role: 'Atención unificada omnicanal',
-    metric: '15x más rápido en primera respuesta',
-    avatar:
-      'https://adereso.ai/wp-content/uploads/2025/04/falabella-caso-exito-adereso.webp',
-    logo: 'clientes/Falabella.svg',
-    href: 'https://adereso.ai/casos-de-exitos/falabella',
-  },
-  {
-    company: 'Grupo K',
-    body: 'Unificamos WhatsApp, chat web e Instagram en una sola plataforma y pasamos de 100 minutos a 1,8 en primera respuesta, sin perder la calidad de atención.',
-    author: 'Equipo de Atención al Cliente',
-    role: 'Experiencia omnicanal',
-    metric: '50x más rápido en primera respuesta',
-    avatar:
-      'https://adereso.ai/wp-content/uploads/2025/04/tienda-mk-caso-exito-adereso.webp',
-    logo: 'clientes/mk-blanco.svg',
-    href: 'https://adereso.ai/casos-de-exitos/grupo-k',
-  },
-  {
     company: 'Chilquinta',
-    body: 'Automatizamos el 98,5% de las consultas por WhatsApp y hoy abordamos casi el 100% con cerca de 1 minuto en primera respuesta, manteniendo un SLA del 98%.',
+    body: 'Tenemos más del 90% de automatización con +80,000 tickets mensuales.',
     author: 'Andrés Sazo',
-    role: 'Jefe de Contact Center',
-    metric: '98% automatización · $1.1M USD ahorro/año',
+    role: 'Jefe Contact Center',
+    metric: '+90% automatización · +80K tickets/mes',
     avatar:
       'https://adereso.ai/wp-content/uploads/2025/04/chilquinta-caso-exito-adereso.webp',
     logo: 'clientes/chilquinta.svg',
     href: 'https://adereso.ai/casos-de-exitos/chilquinta',
+  },
+  {
+    company: 'Cencosud',
+    body: 'Nos cambiamos a Adereso y fue el boom, pasamos de cerrar los casos en 2 días a cerrarlos en 2 a 3 horas.',
+    author: 'Isabel Ruedlinger',
+    role: 'Seller Experience Manager',
+    metric: 'De 2 días a 2–3 horas',
+    avatar:
+      'https://adereso.ai/wp-content/uploads/2025/04/cencosud-caso-exito-adereso.webp',
+    logo: 'clientes/cencosud.svg',
+    href: 'https://adereso.ai/casos-de-exitos/cencosud',
+  },
+  {
+    company: 'Chilquinta',
+    body: 'Es una herramienta flexible, intuitiva y altamente personalizable, algo que con convicción te digo que no existe en el mercado hoy.',
+    author: 'Francisco Cayón',
+    role: 'Subgerente Experiencia Digital',
+    metric: '',
+    avatar:
+      'https://adereso.ai/wp-content/uploads/2025/04/chilquinta-caso-exito-adereso.webp',
+    logo: 'clientes/chilquinta.svg',
+    href: 'https://adereso.ai/casos-de-exitos/chilquinta',
+  },
+  {
+    company: 'Cencosud',
+    body: 'Redujimos un 25% los gastos operacionales y multiplicamos por 6 la productividad gracias a la atención simultánea. Es una plataforma rápida, fácil e intuitiva.',
+    author: 'Kevin Rojas',
+    role: 'Supervisor Servicio al Cliente',
+    metric: '−25% gastos · 6x productividad',
+    avatar:
+      'https://adereso.ai/wp-content/uploads/2025/04/kevin-rojas-cencosud-adereso-caso-exito.webp',
+    logo: 'clientes/cencosud.svg',
+    href: 'https://adereso.ai/casos-de-exitos/cencosud',
   },
 ] as const
 
@@ -614,15 +604,25 @@ export default function App() {
                       pointerEvents: isActive ? 'auto' : 'none',
                     }}
                   >
-                    <div className="testimonial-card__top">
+                    <div
+                      className={`testimonial-card__top${
+                        item.company === 'Sodimac' ? ' testimonial-card__top--sodimac' : ''
+                      }`}
+                    >
                       <img
                         src={item.logo}
                         alt={item.company}
                         className={`testimonial-card__logo${
-                          item.company === 'Cencosud' ? ' testimonial-card__logo--cencosud' : ''
+                          item.company === 'Cencosud'
+                            ? ' testimonial-card__logo--cencosud'
+                            : item.company === 'Sodimac'
+                              ? ' testimonial-card__logo--sodimac'
+                              : ''
                         }`}
                       />
-                      <span className="testimonial-card__metric">{item.metric}</span>
+                      {item.metric ? (
+                        <span className="testimonial-card__metric">{item.metric}</span>
+                      ) : null}
                     </div>
                     <p className="testimonial-card__quote">“{item.body}”</p>
                     <div className="testimonial-card__author">

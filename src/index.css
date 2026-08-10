@@ -1270,6 +1270,10 @@ section.page-section {
   gap: 10px;
 }
 
+.testimonial-card__top--sodimac {
+  grid-template-rows: 24px auto;
+}
+
 .testimonial-card__logo {
   height: 30px;
   width: auto;
@@ -1282,6 +1286,11 @@ section.page-section {
 .testimonial-card__logo--cencosud {
   height: 38px;
   max-width: 150px;
+}
+
+.testimonial-card__logo--sodimac {
+  height: 20px;
+  max-width: 108px;
 }
 
 .testimonial-card__metric {
