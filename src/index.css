@@ -1517,6 +1517,7 @@ section.page-section {
 
 .integration-orbit__node image {
   filter: brightness(0) invert(1);
+  -webkit-filter: brightness(0) invert(1);
   opacity: 0.72;
   transition: opacity 0.25s ease;
 }
