@@ -698,7 +698,7 @@ export default function App() {
         </div>
       </section>
 
-      <section className="page-section section-band">
+      <section className="page-section">
         <div className="container">
           <div className="section-head section-head--wide">
             <span className="section-head__eyebrow">Implementación</span>
