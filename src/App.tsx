@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, type MouseEvent, type PointerEvent as ReactPointerEvent } from 'react'
 import { Hero } from './components/Hero'
 import {
   AgentFeatureMockup,
@@ -255,7 +255,23 @@ export default function App() {
   const [inquiryTab, setInquiryTab] = useState<InquiryTab>('venta')
   const [activeIndustry, setActiveIndustry] = useState<string>(INDUSTRIES[0].id)
   const [activeTestimonial, setActiveTestimonial] = useState(0)
+  const [testimonialDragX, setTestimonialDragX] = useState(0)
+  const [isTestimonialDragging, setIsTestimonialDragging] = useState(false)
   const industriesTrackRef = useRef<HTMLDivElement>(null)
+  const testimonialsStageRef = useRef<HTMLDivElement>(null)
+  const testimonialDragRef = useRef({
+    active: false,
+    startX: 0,
+    startY: 0,
+    x: 0,
+    lastX: 0,
+    lastT: 0,
+    vx: 0,
+    axis: null as null | 'x' | 'y',
+    moved: false,
+    suppressClick: false,
+    pointerId: -1,
+  })
   const lockSyncRef = useRef(false)
   const unlockTimerRef = useRef(0)
 
@@ -266,6 +282,98 @@ export default function App() {
   const goToTestimonial = (index: number) => {
     const len = TESTIMONIALS.length
     setActiveTestimonial(((index % len) + len) % len)
+  }
+
+  const onTestimonialPointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
+    if (event.button !== 0) return
+    const drag = testimonialDragRef.current
+    drag.active = true
+    drag.startX = event.clientX
+    drag.startY = event.clientY
+    drag.x = 0
+    drag.lastX = event.clientX
+    drag.lastT = performance.now()
+    drag.vx = 0
+    drag.axis = null
+    drag.moved = false
+    drag.pointerId = event.pointerId
+  }
+
+  const onTestimonialPointerMove = (event: ReactPointerEvent<HTMLDivElement>) => {
+    const drag = testimonialDragRef.current
+    if (!drag.active || drag.pointerId !== event.pointerId) return
+
+    const dx = event.clientX - drag.startX
+    const dy = event.clientY - drag.startY
+
+    if (!drag.axis) {
+      if (Math.abs(dx) < 8 && Math.abs(dy) < 8) return
+      drag.axis = Math.abs(dx) > Math.abs(dy) * 1.15 ? 'x' : 'y'
+      if (drag.axis === 'y') {
+        drag.active = false
+        return
+      }
+      event.currentTarget.setPointerCapture(event.pointerId)
+      setIsTestimonialDragging(true)
+    }
+
+    if (drag.axis !== 'x') return
+
+    const now = performance.now()
+    const dt = Math.max(now - drag.lastT, 8)
+    drag.vx = (event.clientX - drag.lastX) / dt
+    drag.lastX = event.clientX
+    drag.lastT = now
+    drag.x = dx
+    drag.moved = Math.abs(dx) > 10
+
+    const width = testimonialsStageRef.current?.offsetWidth ?? 360
+    const maxDrag = width * 0.72
+    const resisted =
+      Math.sign(dx) * Math.min(Math.abs(dx), maxDrag) * (0.82 + 0.18 * (1 - Math.min(Math.abs(dx) / maxDrag, 1)))
+    setTestimonialDragX(resisted)
+  }
+
+  const finishTestimonialDrag = (event: ReactPointerEvent<HTMLDivElement>) => {
+    const drag = testimonialDragRef.current
+    if (!drag.active && !isTestimonialDragging) return
+    if (drag.pointerId !== event.pointerId && drag.pointerId !== -1) return
+
+    const width = testimonialsStageRef.current?.offsetWidth ?? 360
+    const distanceThreshold = Math.min(96, width * 0.2)
+    const flicked = Math.abs(drag.vx) > 0.55
+    const shouldAdvance =
+      drag.axis === 'x' && (drag.x < -distanceThreshold || (flicked && drag.vx < -0.35))
+    const shouldGoBack =
+      drag.axis === 'x' && (drag.x > distanceThreshold || (flicked && drag.vx > 0.35))
+
+    if (shouldAdvance) goToTestimonial(activeTestimonial + 1)
+    else if (shouldGoBack) goToTestimonial(activeTestimonial - 1)
+
+    if (drag.moved) {
+      drag.suppressClick = true
+      window.setTimeout(() => {
+        drag.suppressClick = false
+      }, 350)
+    }
+
+    drag.active = false
+    drag.axis = null
+    drag.moved = false
+    drag.pointerId = -1
+    setIsTestimonialDragging(false)
+    setTestimonialDragX(0)
+
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+      event.currentTarget.releasePointerCapture(event.pointerId)
+    }
+  }
+
+  const onTestimonialCardClick = (event: MouseEvent<HTMLAnchorElement>) => {
+    if (testimonialDragRef.current.suppressClick) {
+      event.preventDefault()
+      testimonialDragRef.current.suppressClick = false
+    }
   }
 
   const scrollToIndustry = (id: string) => {
@@ -571,12 +679,19 @@ export default function App() {
           </div>
 
           <div
-            className="testimonials__carousel"
+            className={`testimonials__carousel${isTestimonialDragging ? ' is-dragging' : ''}`}
             role="region"
             aria-roledescription="carrusel"
             aria-label="Casos de éxito"
           >
-            <div className="testimonials__stage">
+            <div
+              ref={testimonialsStageRef}
+              className="testimonials__stage"
+              onPointerDown={onTestimonialPointerDown}
+              onPointerMove={onTestimonialPointerMove}
+              onPointerUp={finishTestimonialDrag}
+              onPointerCancel={finishTestimonialDrag}
+            >
               {TESTIMONIALS.map((item, index) => {
                 const len = TESTIMONIALS.length
                 let offset = index - activeTestimonial
@@ -584,10 +699,14 @@ export default function App() {
                 if (offset < -len / 2) offset += len
                 const isActive = offset === 0
                 const isVisible = Math.abs(offset) <= 1
+                const dragRatio = Math.max(-1, Math.min(1, testimonialDragX / 280))
+                const scale = isActive
+                  ? 1 - Math.abs(dragRatio) * 0.08
+                  : 0.85 + (offset === -Math.sign(dragRatio) ? Math.abs(dragRatio) * 0.08 : 0)
 
                 return (
                   <a
-                    key={item.company}
+                    key={item.author}
                     className={`testimonial-card${isActive ? ' is-active' : ''}`}
                     href={item.href}
                     target="_blank"
@@ -595,11 +714,17 @@ export default function App() {
                     aria-hidden={!isActive}
                     tabIndex={isActive ? 0 : -1}
                     draggable={false}
+                    onClick={onTestimonialCardClick}
                     style={{
-                      transform: `translate(calc(-50% + ${offset * 58}%), -50%) scale(${
-                        isActive ? 1 : 0.85
-                      })`,
-                      opacity: isVisible ? (isActive ? 1 : 0.28) : 0,
+                      transform: `translate3d(calc(-50% + ${offset * 58}% + ${
+                        isVisible ? testimonialDragX : 0
+                      }px), -50%, 0) scale(${scale})`,
+                      opacity: isVisible
+                        ? Math.min(
+                            1,
+                            isActive ? 1 - Math.abs(dragRatio) * 0.12 : 0.28 + Math.abs(dragRatio) * 0.35,
+                          )
+                        : 0,
                       zIndex: isActive ? 3 : isVisible ? 2 : 1,
                       pointerEvents: isActive ? 'auto' : 'none',
                     }}
@@ -658,11 +783,11 @@ export default function App() {
               <div className="testimonials__dots" role="tablist" aria-label="Seleccionar testimonio">
                 {TESTIMONIALS.map((item, index) => (
                   <button
-                    key={item.company}
+                    key={item.author}
                     type="button"
                     className={`testimonials__dot${index === activeTestimonial ? ' is-active' : ''}`}
                     onClick={() => goToTestimonial(index)}
-                    aria-label={`Ir al testimonio de ${item.company}`}
+                    aria-label={`Ir al testimonio de ${item.author}`}
                     aria-selected={index === activeTestimonial}
                     role="tab"
                   />

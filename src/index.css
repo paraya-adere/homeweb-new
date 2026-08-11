@@ -769,6 +769,15 @@ section.page-section {
   min-height: 360px;
 }
 
+.inquiry__split-mock--chat {
+  min-height: 420px;
+}
+
+.inquiry__split-mock--chat > * {
+  height: 100%;
+  min-height: 100%;
+}
+
 .inquiry__split-copy {
   display: flex;
   flex-direction: column;
@@ -1227,6 +1236,14 @@ section.page-section {
   width: 100%;
   height: clamp(320px, 42vw, 380px);
   overflow: hidden;
+  touch-action: pan-y;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.testimonials__carousel.is-dragging .testimonials__stage {
+  cursor: grabbing;
 }
 
 .testimonial-card {
@@ -1253,9 +1270,14 @@ section.page-section {
   transform-origin: center;
   will-change: transform, opacity;
   transition:
-    transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1),
-    opacity 0.5s cubic-bezier(0.2, 0.8, 0.2, 1),
+    transform 0.62s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.48s cubic-bezier(0.22, 1, 0.36, 1),
     border-color 0.25s ease;
+  -webkit-user-drag: none;
+}
+
+.testimonials__carousel.is-dragging .testimonial-card {
+  transition: none;
 }
 
 .testimonial-card.is-active {
@@ -3085,6 +3107,16 @@ section.page-section {
     min-height: 320px;
   }
 
+  .inquiry__split-mock--chat {
+    min-height: 0;
+    height: auto;
+  }
+
+  .inquiry__split-mock--chat > * {
+    height: auto;
+    min-height: 0;
+  }
+
   .integration-map__topology {
     display: flex;
     flex-direction: column;
@@ -3473,6 +3505,14 @@ section.page-section {
 
   .inquiry__wide .inquiry__mock {
     min-height: 420px;
+  }
+
+  .inquiry__split-mock--chat {
+    min-height: 0;
+  }
+
+  .inquiry__split-mock--chat > * {
+    min-height: 0;
   }
 
   .support__grid {

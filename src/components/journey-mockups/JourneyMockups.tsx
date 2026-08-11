@@ -25,6 +25,7 @@ function Card({
   children,
   monochrome = false,
   hideHeader = false,
+  fitContent = false,
 }: {
   icon?: ReactNode
   title?: string
@@ -32,10 +33,15 @@ function Card({
   children: ReactNode
   monochrome?: boolean
   hideHeader?: boolean
+  fitContent?: boolean
 }) {
   return (
     <Tooltip.Provider delayDuration={200}>
-      <div className="flex h-full flex-col overflow-hidden rounded-xl bg-[#0C0C0D]">
+      <div
+        className={`flex flex-col overflow-hidden rounded-xl bg-[#0C0C0D] ${
+          fitContent ? 'h-auto min-h-full' : 'h-full'
+        }`}
+      >
         {!hideHeader && (
         <header className="flex h-12 shrink-0 items-center gap-2.5 border-b border-white/[0.07] bg-[#131415] px-4">
           <span
@@ -71,7 +77,7 @@ function Card({
           </Tooltip.Root>
         </header>
         )}
-        <div className="min-h-0 flex-1">{children}</div>
+        <div className={fitContent ? 'h-auto' : 'min-h-0 flex-1'}>{children}</div>
       </div>
     </Tooltip.Provider>
   )
@@ -595,72 +601,93 @@ function AppointmentFeatureCell() {
 
 function TechSupportMockup() {
   return (
-    <Card monochrome hideHeader>
-      <MockShell>
-        <div className="flex shrink-0 items-center gap-2.5">
-          <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-white/[0.06] text-white/60">
-            <IconHeadset size={17} stroke={1.7} />
-          </span>
-          <div className="min-w-0 flex-1">
-            <p className="text-[13px] font-medium text-white/85">Soporte · Camila M.</p>
-            <p className="text-[10px] text-white/40">WhatsApp · Falla técnica</p>
-          </div>
-          <span className="inline-flex items-center gap-1 rounded-full border border-white/[0.07] bg-white/[0.035] px-2 py-1 text-[10px] font-medium text-white/45">
-            <IconSparkles size={11} stroke={1.7} />
-            IA
-          </span>
-        </div>
-
-        <div className="mt-3 flex min-h-0 flex-1 flex-col">
-          <div className="flex items-end justify-end gap-2">
-            <div className={`max-w-[80%] rounded-2xl rounded-br-sm border px-3.5 py-2.5 ${PANEL_BASE}`}>
-              <p className="text-[14px] leading-snug text-white/80">
-                Mi Cafetera Aura no enciende después de la actualización 😕
+    <Card monochrome hideHeader fitContent>
+      <div className="relative flex min-h-full flex-col p-3 max-[720px]:p-2.5 sm:p-3.5">
+        <span
+          aria-hidden
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background:
+              'radial-gradient(130% 95% at 50% -15%, rgba(255,255,255,0.07), rgba(255,255,255,0) 58%)',
+          }}
+        />
+        <span
+          aria-hidden
+          className="pointer-events-none absolute inset-0 opacity-[0.05] mix-blend-soft-light"
+          style={{ backgroundImage: NOISE_BG, backgroundSize: '180px 180px' }}
+        />
+        <div className="relative z-10 flex min-h-full flex-1 flex-col justify-between gap-2.5 max-[720px]:gap-2">
+          <div className="flex shrink-0 items-center gap-2.5">
+            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/[0.06] text-white/60 sm:h-9 sm:w-9">
+              <IconHeadset size={16} stroke={1.7} />
+            </span>
+            <div className="min-w-0 flex-1">
+              <p className="text-[12px] font-medium text-white/85 sm:text-[13px]">
+                Soporte · Camila M.
               </p>
+              <p className="text-[10px] text-white/40">WhatsApp · Falla técnica</p>
             </div>
-            <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-white/[0.08] text-[9px] font-semibold text-white/55">
-              CM
+            <span className="inline-flex items-center gap-1 rounded-full border border-white/[0.07] bg-white/[0.035] px-2 py-1 text-[10px] font-medium text-white/45">
+              <IconSparkles size={11} stroke={1.7} />
+              IA
             </span>
           </div>
 
-          <div className="mt-3 max-w-[86%]">
-            <div className="mb-1 flex items-center gap-1.5 pl-0.5">
-              <IconSparkles size={12} stroke={1.9} className="text-[#52CE5E]" />
-              <span className="text-[10px] font-semibold uppercase tracking-[0.09em] text-[#52CE5E]/80">
-                Adereso IA
+          <div className="flex min-h-0 flex-1 flex-col justify-center gap-2.5 max-[720px]:gap-2">
+            <div className="flex items-end justify-end gap-2">
+              <div
+                className={`max-w-[82%] rounded-2xl rounded-br-sm border px-3 py-2 sm:px-3.5 sm:py-2.5 ${PANEL_BASE}`}
+              >
+                <p className="text-[13px] leading-snug text-white/80 sm:text-[14px]">
+                  Mi Cafetera Aura no enciende después de la actualización 😕
+                </p>
+              </div>
+              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-white/[0.08] text-[9px] font-semibold text-white/55">
+                CM
               </span>
             </div>
-            <div className="rounded-2xl rounded-tl-sm border border-[#52CE5E]/25 bg-[#52CE5E]/[0.08] px-3.5 py-2.5">
-              <p className="text-[14px] leading-snug text-white/85">
-                Hice un diagnóstico rápido y tu equipo requiere revisión técnica. Te derivo con un
-                especialista.
-              </p>
+
+            <div className="max-w-[88%]">
+              <div className="mb-1 flex items-center gap-1.5 pl-0.5">
+                <IconSparkles size={12} stroke={1.9} className="text-[#52CE5E]" />
+                <span className="text-[10px] font-semibold uppercase tracking-[0.09em] text-[#52CE5E]/80">
+                  Adereso IA
+                </span>
+              </div>
+              <div className="rounded-2xl rounded-tl-sm border border-[#52CE5E]/25 bg-[#52CE5E]/[0.08] px-3 py-2 sm:px-3.5 sm:py-2.5">
+                <p className="text-[13px] leading-snug text-white/85 sm:text-[14px]">
+                  Hice un diagnóstico rápido y tu equipo requiere revisión técnica. Te derivo con un
+                  especialista.
+                </p>
+              </div>
             </div>
-          </div>
 
-          <div className="mt-3.5 flex items-center gap-2.5 px-0.5">
-            <span className="h-px flex-1 bg-white/[0.08]" />
-            <span className="anim-handoff inline-flex shrink-0 items-center gap-2 rounded-full border border-dashed border-[#52CE5E]/35 bg-[#52CE5E]/[0.08] px-3.5 py-1.5 text-[13px] font-medium text-white/75">
-              <IconHeadset size={15} stroke={1.8} className="text-[#52CE5E]" />
-              Derivando a un especialista
-            </span>
-            <span className="h-px flex-1 bg-white/[0.08]" />
-          </div>
+            <div className="flex items-center gap-2 px-0.5">
+              <span className="h-px min-w-0 flex-1 bg-white/[0.08]" />
+              <span className="anim-handoff inline-flex max-w-[min(100%,240px)] items-center gap-1.5 rounded-full border border-dashed border-[#52CE5E]/35 bg-[#52CE5E]/[0.08] px-2.5 py-1 text-[11px] font-medium text-white/75 sm:gap-2 sm:px-3.5 sm:py-1.5 sm:text-[13px]">
+                <IconHeadset size={14} stroke={1.8} className="shrink-0 text-[#52CE5E]" />
+                <span className="min-w-0 leading-tight">Derivando a un especialista</span>
+              </span>
+              <span className="h-px min-w-0 flex-1 bg-white/[0.08]" />
+            </div>
 
-          <div className="mt-3 flex items-end gap-2">
-            <span className="relative flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#5B9BFF]/20 text-[9px] font-semibold text-[#5B9BFF]">
-              DR
-              <span className="absolute -right-0.5 -bottom-0.5 h-2 w-2 rounded-full border border-[#0a0a0b] bg-[#52CE5E]" />
-            </span>
-            <div className={`max-w-[82%] rounded-2xl rounded-bl-sm border px-3.5 py-2.5 ${PANEL_BASE}`}>
-              <p className="text-[11px] font-medium text-[#5B9BFF]/80">Diego R. · Especialista</p>
-              <p className="mt-0.5 text-[14px] leading-snug text-white/80">
-                Hola Camila, ya tengo tu caso. Activo la garantía y coordinamos la visita.
-              </p>
+            <div className="flex items-end gap-2">
+              <span className="relative flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#5B9BFF]/20 text-[9px] font-semibold text-[#5B9BFF]">
+                DR
+                <span className="absolute -right-0.5 -bottom-0.5 h-2 w-2 rounded-full border border-[#0a0a0b] bg-[#52CE5E]" />
+              </span>
+              <div
+                className={`max-w-[84%] rounded-2xl rounded-bl-sm border px-3 py-2 sm:px-3.5 sm:py-2.5 ${PANEL_BASE}`}
+              >
+                <p className="text-[11px] font-medium text-[#5B9BFF]/80">Diego R. · Especialista</p>
+                <p className="mt-0.5 text-[13px] leading-snug text-white/80 sm:text-[14px]">
+                  Hola Camila, ya tengo tu caso. Activo la garantía y coordinamos la visita.
+                </p>
+              </div>
             </div>
           </div>
         </div>
-      </MockShell>
+      </div>
     </Card>
   )
 }
@@ -675,7 +702,7 @@ function TechSupportFeatureCell() {
   return (
     <div className="inquiry__wide">
       <div className="inquiry__card inquiry__card--split">
-        <div className="inquiry__split-mock">
+        <div className="inquiry__split-mock inquiry__split-mock--chat">
           <TechSupportMockup />
         </div>
         <div className="inquiry__split-copy">
